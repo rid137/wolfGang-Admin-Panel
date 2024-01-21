@@ -47,7 +47,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
 
     
     return (
-        <div className={`${ isNavOpen ? " block bg-primary min-w-[60vw] absolute top- left- h-[100vh] z-30 stic" : " hidden" } bg-primary lg:min-w-[20vw] lg:block w-0 h-0 hidde  lg:h-[100vh] py-8 text-white overflow-hidde relativ lg:sticky left-0 top-0 `}>
+        <div className={`${ isNavOpen ? " block bg-primary min-w-[60vw] absolute top- left- h-[100vh] z-30 stic" : " hidden" } bg-primary lg:min-w-[20vw] lg:block w-0 h-0 hidde  lg:h-[100vh] py-8 text-white overflow-y-scroll relativ lg:sticky left-0 top-0 `}>
             <div className="text-center text-white mb-10 flex items-center justify-center ">
                 <img src={wolfgang} className="cursor-pointer" alt="logo" />
 
