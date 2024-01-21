@@ -19,6 +19,14 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
     const [active, setActive] = useState("dashboard")
 
+    useEffect(() => {
+        document.body.style.overflow = isNavOpen ? 'hidden' : 'auto';
+    
+        return () => {
+          document.body.style.overflow = 'auto';
+        };
+      }, [isNavOpen]);
+
     const logout = ():void => {
         if(window.confirm("Are you sure you want to logout?")) {
             alert("You have logged out successfully")
