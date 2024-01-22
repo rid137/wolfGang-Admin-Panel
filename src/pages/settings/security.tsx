@@ -19,8 +19,7 @@ const Security = () => {
                             <label className="font-bold">Old Password</label>
                             <input type="text" className="w-full rounded-md py-4 px-3 mt-2" placeholder="Enter Old Password"  />
                         </div>
-
-                            
+                  
                     </div>
                     <div className="flex sm:flex-row flex-col justify-center items-center gap-4 w-full my-6">
                         <div className="flex flex-col w-full sm:w-1/2">
