@@ -48,7 +48,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
     
     return (
         <div className={`${ isNavOpen ? " block bg-primary min-w-[60vw] absolute top- left- h-[100vh] z-30 stic" : " hidden" } bg-primary lg:min-w-[20vw] lg:block w-0 h-0 hidde  lg:h-[100vh] py-4 text-white overflow-y-scroll relativ lg:sticky left-0 top-0 `}>
-            <div className="text-center text-white mb-10 flex items-center justify-center ">
+            <div className="text-center text-white mb-5 flex items-center justify-center ">
                 <img src={wolfgang} className="cursor-pointer" alt="logo" />
 
             </div>
@@ -95,7 +95,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
                     </Link>
                 </li>
                 
-            <div className="absolute bottom-10 w-full">
+            <div className="absolute bottom-12 w-full">
                 <h1 className="uppercase tracking-wide ml-5 text-gray-300 text-normal sm:text-md font-bold">Profile</h1>
 
                     <ul className="flex flex-col gap-3 mt-5 pr-4 xspr-10 sm:pr-14">
