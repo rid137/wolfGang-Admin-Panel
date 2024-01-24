@@ -4,7 +4,7 @@ import CustomTable from "../../components/common/customTable";
 
 
 const DisputeCenter = () => {
-    const navigate = useNavigate()
+const navigate = useNavigate()
 
     const goToDisputeAccounttDetails = () => {
         navigate("/dispute_center/dispute_account_details")
