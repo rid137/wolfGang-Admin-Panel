@@ -1,25 +1,28 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DateTime } from "luxon";
-import { UserAuth } from "../../hooks/userAuthContext";
+// import { UserAuth } from "../../hooks/userAuthContext";
 import axios from "axios";
 import { BASE_URL } from "../../libs";
 import NewCustomTable from "../../components/common/newCustomTable";
-
+import { AdminAuth } from "../../hooks/useAdminAuthContext";
 
 
 const DisputeCenter = () => {
   const [allClients, setAllClients] = useState([]);
   const navigate = useNavigate();
 
-  const {userAuthData} = UserAuth();
-  const accessToken = userAuthData?.token;
+  const { adminAuthData  } = AdminAuth();
+  const accessToken = adminAuthData?.token;
+  // const id = managerObj?.id
+  // console.log("manId", managerObj)
 
+  // `${BASE_URL}/admin/getClientForDispute/${}`,
 
-  const fetchAllClients = async () => {
+  const fetchClientForDispute = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/admin/getAllClients`,
+        `${BASE_URL}/admin/getClientForDispute/43`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -28,6 +31,7 @@ const DisputeCenter = () => {
       );
       const clientsData = response.data;
       setAllClients(clientsData);
+      console.log("clientDetails", clientsData)
 
       return clientsData;
     } catch (error) {
@@ -36,11 +40,11 @@ const DisputeCenter = () => {
   };
 
   useEffect(() => {
-    const fetchAllClientsInfo = async () => {
-      await fetchAllClients();
+    const fetchClientForDisputeInfo = async () => {
+      await fetchClientForDispute();
     };
     
-    accessToken && fetchAllClientsInfo();
+    accessToken && fetchClientForDisputeInfo();
   }, [accessToken]);
 
 
@@ -53,7 +57,7 @@ const DisputeCenter = () => {
   }));
 
   const goToDisputeAccounttDetails = (id: number) => {
-    navigate(`/dispute_center/dispute_account_details/${id}`);
+    navigate(`/dashboard/dispute_center/dispute_account_details/${id}`);
   };
 
   return(

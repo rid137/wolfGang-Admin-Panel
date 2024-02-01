@@ -7,8 +7,9 @@ import CustomModal from "../../components/common/customModal";
 import DashboardStatistics from "../../components/dashboardContent/dashboardStatistics";
 import AddManagerForm from "../../components/dashboardContent/addManagerForm";
 import { BASE_URL } from "../../libs";
-import { UserAuth } from "../../hooks/userAuthContext";
+// import { UserAuth } from "../../hooks/userAuthContext";
 import NewCustomTable from "../../components/common/newCustomTable";
+import { AdminAuth } from "../../hooks/useAdminAuthContext";
 // const NewCustomTable = React.lazy(() => import('../../components/common/newCustomTable'));
 
 
@@ -21,9 +22,9 @@ const Dashboard = () => {
 
   const navigate = useNavigate();
 
-  const {userAuthData} = UserAuth();
-  const accessToken = userAuthData?.token;
-  const id = userAuthData?.userId;
+  const { adminAuthData } = AdminAuth();
+  const accessToken = adminAuthData?.token;
+  const id = adminAuthData?.userId;
 
   const goToClientDetails = (id: number) => {
     navigate(`client_details/${id}`)
@@ -99,7 +100,8 @@ const Dashboard = () => {
     };
 
     const fetchAllManagersInfo = async () => {
-      await fetchAllManagers();
+      const allman = await fetchAllManagers();
+      console.log("alllman", allman)
     };
 
     const fetchDisputeAccountInfo = async () => {
@@ -177,7 +179,7 @@ const Dashboard = () => {
       </div>
       <p>View all of manager information</p>
 
-      {showAddAdminForm && <CustomModal closeModal={setShowAddAdminForm}> <AddManagerForm /> </CustomModal>}
+      {showAddAdminForm && <CustomModal closeModal={setShowAddAdminForm}> <AddManagerForm fetchAllManagers={fetchAllManagers} /> </CustomModal>}
 
 
       {/* <CustomTable

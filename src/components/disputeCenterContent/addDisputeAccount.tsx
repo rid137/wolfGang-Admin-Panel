@@ -159,7 +159,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
 
 
     const goToClientDetails = (id: string) => {
-        navigate(`/client_details/${id}`)
+        navigate(`/dashboard/client_details/${id}`)
     }
 
   return (

@@ -58,38 +58,38 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
             <ul className="flex flex-col gap-[.5rem] sm:gap-3 mt-5 pr-4  sm:pr-14">
                 
                 <li onClick={handleClick}>
-                    <Link to={"/"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "dashboard" && "bg-white text-primary" }`} onClick={() => setActive("dashboard")}>
+                    <Link to={"/dashboard"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "dashboard" && "bg-white text-primary" }`} onClick={() => setActive("dashboard")}>
                         <MdDashboard className="text-[1.1rem] sm:text-[1.4rem] " />
                         <p className="text-[.9rem] sm:text-md">Dashboard</p>
                     </Link>
 
                 </li>
                 <li onClick={handleClick}>
-                    <Link to={"/dispute_center"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "dispute_center" && "bg-white text-primary" }`} onClick={() => setActive("dispute_center")}>
+                    <Link to={"/dashboard/dispute_center"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "dispute_center" && "bg-white text-primary" }`} onClick={() => setActive("dispute_center")}>
                         <MdOutlineHouse className="text-[1.2rem] sm:text-[1.4rem]" />
                         <p className="text-[.9rem] sm:text-md">Dispute Center</p>
                     </Link>
                 </li>
                 <li onClick={handleClick}>
-                    <Link to={"/letter_creation"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "letter_creation" && "bg-white text-primary" }`} onClick={() => setActive("letter_creation")}>
+                    <Link to={"/dashboard/letter_creation"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "letter_creation" && "bg-white text-primary" }`} onClick={() => setActive("letter_creation")}>
                         <FaRegFileAlt className="text-[1rem] sm:text-[1.2rem]" />
                         <p className="text-[.9rem] sm:text-md">Letter Creation</p>
                     </Link>
                 </li>
                 <li onClick={handleClick}>
-                    <Link to={"/payment"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "payment" && "bg-white text-primary" }`} onClick={() => setActive("payment")}>
+                    <Link to={"/dashboard/payment"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "payment" && "bg-white text-primary" }`} onClick={() => setActive("payment")}>
                         <MdOutlinePayment className="text-[1.2rem] sm:text-[1.4rem]" />
                         <p className="text-[.9rem] sm:text-md">Payment</p>
                     </Link>
                 </li>
                 <li onClick={handleClick}>
-                    <Link to={"/notifications"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "notifications" && "bg-white text-primary" }`} onClick={() => setActive("notifications")}>
+                    <Link to={"/dashboard/notifications"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "notifications" && "bg-white text-primary" }`} onClick={() => setActive("notifications")}>
                         <IoMdNotificationsOutline className="text-[1.2rem] sm:text-[1.4rem]" />
                         <p className="text-[.9rem] sm:text-md">Notifications</p>
                     </Link>
                 </li>
                 <li onClick={handleClick}>
-                    <Link to={"/settings"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "settings" && "bg-white text-primary" }`} onClick={() => setActive("settings")}>
+                    <Link to={"/dashboard/settings"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "settings" && "bg-white text-primary" }`} onClick={() => setActive("settings")}>
                         <IoSettingsOutline className="text-[1.1rem] sm:text-[1.4rem]" />
                         <p className="text-[.9rem] sm:text-md">Settings</p>
                     </Link>
@@ -101,7 +101,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
                     <ul className="flex flex-col gap-[.4rem] sm:gap-3 mt-5 pr-4 xspr-10 sm:pr-14">
                         
                         <li onClick={handleClick}>
-                            <Link to={"/settings"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "" && "bg-white text-primary" }`} onClick={() => setActive("")}>
+                            <Link to={"/dashboard/settings"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "" && "bg-white text-primary" }`} onClick={() => setActive("")}>
                                 <FaUser className="text-[1rem] sm:text-[1.4rem] " />
                                 <p className="text-[.9rem] sm:text-md">Dianne Rusell</p>
                             </Link>

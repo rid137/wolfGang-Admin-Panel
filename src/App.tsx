@@ -22,15 +22,32 @@ import NotFound from './pages/notFound';
 import SettingsLayout from './pages/settings/settingsLayout';
 import { AuthContextProvider } from './context/authcontext';
 import { Toaster } from 'react-hot-toast';
+import Login from './components/authentication/login';
+import AuthLayout from './components/authentication/authLayout';
+import { AdminAuthContextProvider } from './context/adminAuthContext';
+import ProtectedPage from './components/authentication/protectedPage';
 
 
 const App = () => {
     return(
+        <AdminAuthContextProvider>
+
         <AuthContextProvider>
         <Toaster />
         <BrowserRouter>
             <Routes>
-                <Route path='/' element={<Layout />}>
+                <Route path='/' element={<AuthLayout />}>
+                    {/* <Route index element={<Register />} /> */}
+                    {/* <Route path='payment_details' element={<PaymentDetails />} />
+                    <Route path='document_upload' element={<DocumentUpload />} />
+                    <Route path='create_password' element={<CreatePassword />} /> */}
+                    <Route index element={<Login />} />
+                    {/* <Route path='forgot_password' element={<ForgotPassword />} />
+                    <Route path='security_code' element={<SecurityCode />} />
+                    <Route path='reset_password' element={<ResetPassword />} /> */}
+                </Route>
+
+                <Route path='/dashboard' element={<ProtectedPage> <Layout /> </ProtectedPage>}>
                     <Route index element={<Dashboard/>} /> 
                     
                     <Route path='client_details' element={<ClientDetailsLayout />}>
@@ -67,6 +84,8 @@ const App = () => {
             </Routes>
         </BrowserRouter>
         </AuthContextProvider>
+        </AdminAuthContextProvider>
+
 
         
     );

@@ -35,7 +35,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
     const [checkboxes, setCheckboxes] = useState<CheckboxData[]>(initialCheckboxes);
 
     const goToClientDetails = (id: string) => {
-        navigate(`/client_details/${id}`)
+        navigate(`/dashboard/client_details/${id}`)
     }
 
 

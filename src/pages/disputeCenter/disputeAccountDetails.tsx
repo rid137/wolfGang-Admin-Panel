@@ -13,8 +13,9 @@ import AddInquiry from "../../components/disputeCenterContent/addInquiry";
 import FicoScoreTable from "../../components/disputeCenterContent/ficoScoreTable";
 import AccountListTable from "../../components/disputeCenterContent/accountListTable";
 import InquiryListTable from "../../components/disputeCenterContent/inquiryListTable";
-import { UserAuth } from "../../hooks/userAuthContext";
+// import { UserAuth } from "../../hooks/userAuthContext";
 import { BASE_URL } from "../../libs";
+import { AdminAuth } from "../../hooks/useAdminAuthContext";
 
 
 export const addFicoScoreSchema = z.object({
@@ -46,8 +47,8 @@ const DisputeAccountDetails = () => {
 
     // const navigate = useNavigate();
 
-    const {userAuthData} = UserAuth()
-    const accessToken = userAuthData?.token
+    const { adminAuthData } = AdminAuth();
+    const accessToken = adminAuthData?.token
     
 
     const fetchSingleClient = async () => {
@@ -108,11 +109,6 @@ const DisputeAccountDetails = () => {
         formData.append('experianScore', data.experian as string);
         formData.append('transunionScore', data.transunion as string);
         // formData.append('date', formattedDate);
-    
-        console.log("FormData contents:");
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
-        }
 
         const toastId = toast.loading("Adding Scores");
 

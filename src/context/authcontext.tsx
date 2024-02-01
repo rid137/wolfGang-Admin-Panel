@@ -1,4 +1,5 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
+import { UserAuthDataType } from '../types/userAuthTypes';
 
 
 type UserType = {
@@ -9,12 +10,12 @@ type UserType = {
   password?: string
 }
 
-interface UserAuthData {
-  token: string
-  refreshToken: string
-  userId: number
-  email: string
-}
+// interface UserAuthData {
+//   token: string
+//   refreshToken: string
+//   userId: number
+//   email: string
+// }
 
 interface AuthContextType {
   user: UserType | null
@@ -22,8 +23,8 @@ interface AuthContextType {
   returnedUserData: any
   setReturnedUserData: React.Dispatch<React.SetStateAction<any>>
 
-  userAuthData: UserAuthData | null
-  setUserAuthData: React.Dispatch<React.SetStateAction<UserAuthData | null>>
+  userAuthData: UserAuthDataType | null
+  setUserAuthData: React.Dispatch<React.SetStateAction<UserAuthDataType | null>>
 
 }
     
@@ -36,7 +37,7 @@ export const AuthContext = createContext({} as AuthContextType);
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     const [user, setUser] = useState<UserType | null>(null); 
     const [returnedUserData, setReturnedUserData] = useState<any>();
-    const [userAuthData, setUserAuthData] = useState<UserAuthData | null>(null)
+    const [userAuthData, setUserAuthData] = useState<UserAuthDataType | null>(null)
 
     const LOCAL_STORAGE_KEY = "returnedUserData"
     const LOCAL_STORAGE_USERAUTHDATA_KEY = "userAuthData"

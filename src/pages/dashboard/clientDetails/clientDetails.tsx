@@ -5,9 +5,10 @@ import { DateTime } from "luxon";
 import backarrow from "../../../assets/backarrow.svg"
 import Disputes from "../../../components/dashboardContent/clientDetailsContent/disputes";
 import CustomLabelInput from "../../../utils/customLabelInput";
-import { UserAuth } from "../../../hooks/userAuthContext";
+// import { UserAuth } from "../../../hooks/userAuthContext";
 import { BASE_URL } from "../../../libs";
 import { Piechart } from "../../../components/dashboardContent/clientDetailsContent/pie_chart";
+import { AdminAuth } from "../../../hooks/useAdminAuthContext";
 
 const ClientDetails = () => {
     const [showClientDetails, setShowClientDetails] = useState<boolean>(false);
@@ -17,8 +18,8 @@ const ClientDetails = () => {
 
     const navigate = useNavigate();
 
-    const {userAuthData} = UserAuth();
-    const accessToken = userAuthData?.token;
+    const { adminAuthData  } = AdminAuth();
+    const accessToken = adminAuthData?.token;
 
     const fetchSingleClient = async () => {
         try {
@@ -89,11 +90,11 @@ const ClientDetails = () => {
     }
 
     const goToBilling = () => {
-        navigate("/client_details/billing")
+        navigate("/dashboard/client_details/billing")
     }
 
     const goToDisputeCenter = () => {
-        navigate("/dispute_center")
+        navigate("/dashboard/dispute_center")
     }
     
 
@@ -200,7 +201,7 @@ const ClientDetails = () => {
                         <div className="flex items-cente justify-start gap-">
                             <p  className="bg-[#DCDDE0] font-bold rounded-tl-lg rounded-bl-lg text-[.7rem] sm:text-[.9rem]  p-4 text-center">Login Details</p>
                             <div className="bg-white  p-4 md:pr-16 rounded-tr-lg text-[.7rem] sm:text-[.9rem] rounded-br-lg">
-                                <p>{userAuthData?.email}</p>
+                                <p>{adminAuthData?.email}</p>
                                 <p>password1</p>
                                 <p>{`${singleClient?.firstName} ${singleClient?.middleName} ${singleClient?.lastName}`}</p>
                             </div>
