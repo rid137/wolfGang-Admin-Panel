@@ -35,7 +35,7 @@ export const AuthContext = createContext({} as AuthContextType);
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     const [user, setUser] = useState<UserType | null>(null); 
-    const [returnedUserData, setReturnedUserData] = useState<any>(); // Work on the 'any' type later
+    const [returnedUserData, setReturnedUserData] = useState<any>();
     const [userAuthData, setUserAuthData] = useState<UserAuthData | null>(null)
 
     const LOCAL_STORAGE_KEY = "returnedUserData"
@@ -71,7 +71,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
 
   // console.log("returnedUserData", returnedUserData)
-  console.log("userAuthData", userAuthData)
+  // console.log("userAuthData", userAuthData)
   // console.log("user", user)
     
   
@@ -80,37 +80,4 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         {children}
       </AuthContext.Provider>
     )
-};
-
-
-
-
-
-
-
-
-
-
-// type UserContextType = {
-//     user: UserType | null
-//     setUser: React.Dispatch<React.SetStateAction<UserType | null>>
-// }
-
-// type SignUpContextProviderProps = {
-//     children: React.ReactNode
-// }
-
-// export const SignUpContext = createContext({} as UserContextType)
-
-// export const SignUpContextProvider = ({ children }: SignUpContextProviderProps) => {
-//     const [user, setUser] = useState<UserType | null>(null)
-
-//     return (
-//         <SignUpContext.Provider value={{ user, setUser }}>
-//             {children}
-//         </SignUpContext.Provider>
-//     )
-// }
-
-
-  
+};  

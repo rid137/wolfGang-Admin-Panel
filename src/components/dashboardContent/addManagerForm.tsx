@@ -36,7 +36,7 @@ const AddManagerForm = () => {
 
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         const formData = new FormData();
         

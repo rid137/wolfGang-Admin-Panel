@@ -40,7 +40,7 @@ const AddClientForm = () => {
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         
-        console.log("data", data)
+        // console.log("data", data)
         const formData = new FormData();
         
         formData.append("email", data.email);
@@ -60,7 +60,7 @@ const AddClientForm = () => {
                     'Content-Type': 'application/json',
                 }
             })
-            console.log("response", response.data)
+            // console.log("response", response.data)
             setUserAuthData(response.data)
             toast.success("Manager Account Created successfully", { id: toastId });
             

@@ -70,7 +70,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         const selectedCheckbox = checkboxes.find(checkbox => checkbox.checked);
 
