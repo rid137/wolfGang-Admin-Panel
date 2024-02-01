@@ -141,7 +141,6 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
 
             <div className="bg-greyBg w-ful text-black pb-4 m-w-[90%] w-full overflow-x-scrol "> 
                 <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-5 lg:mx-10 text-[.7rem] lg:text-[.9rem]">
-                    <p>date</p>
                     <p>Account name</p>
                     <p>Account number</p>
                     <p>Bureau</p>
@@ -159,7 +158,6 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
                                 filteredArray?.slice(0, 10).map((item: any) => (
                                     <div key={item?.id} className="bg-white mx-4 rounded-lg" >
                                         <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-3 text-[.7rem] lg:text-[.9rem]">
-                                            <p>{item?.date}</p>
                                             <p>{item?.accountName}</p>
                                             <p>{item?.accountNumber}</p>
                                             <p>{item?.bureau}</p>
