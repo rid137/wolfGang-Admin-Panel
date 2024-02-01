@@ -1,8 +1,79 @@
 import PaginationBtn from '../common/paginationBtn';
 import trash from "../../assets/trash.svg";
+import axios from 'axios';
+import { BASE_URL } from '../../libs';
+import { useEffect, useState } from 'react';
+import { NewCustomTableSkeleton } from '../common/newCustomTable';
+import toast from 'react-hot-toast';
 
 
-const AccountListTable = () => {
+interface AccountListTableProps {
+    id: string;
+    accessToken: string
+}
+  
+const AccountListTable: React.FC<AccountListTableProps> = ({id, accessToken}): any => {
+    const [allAccounts, setAllAccounts] = useState<any>()
+
+
+    const fetchAllAccounts = async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/account/findUnattendedAccounts/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          const allAccountsData = response.data;
+
+          setAllAccounts(allAccountsData);
+      
+          return allAccountsData;
+        } catch (error) {
+          console.error('Error fetching all clients:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchAllAccountsInfo = async () => {
+          await fetchAllAccounts();
+        };
+        
+        accessToken && fetchAllAccountsInfo();
+    }, [accessToken]);
+
+    const handleDelete = async (id: string | number) => {
+        if(window.confirm('Are you sure you want to delete the blog'))  {
+            toast.loading("Deleting FICO score")
+
+            try {
+                const response = await axios.delete(
+                  `${BASE_URL}/account/deleteAccount/${id}`,
+                  {
+                    headers: {
+                      Authorization: `Bearer ${accessToken}`,
+                    },
+                  }
+                );
+
+                if (response.status === 200) {
+                    toast.success('FICO score deleted successfully')
+                    await fetchAllAccounts();
+                }
+
+            } catch (error) {
+                toast.error('FICO score deleted successfully')
+                console.error('Error fetching all clients:', error);
+            }
+
+            toast.remove()
+        }        
+    }
+
+
+
   return (
     <>
         <div className="flex justify-between items-center mt-10">
@@ -28,9 +99,34 @@ const AccountListTable = () => {
                 <p>Delete</p>
             </div>
 
-            {Array(10)
-                    .fill(10)
-                    .map((_,) => (
+            {
+                allAccounts?.length > 0 ? 
+                <>
+                    {
+                        allAccounts?.slice(0, 10).map((item: any) => (
+                            <div key={item.id} className="bg-white mx-1 md:mx-4 rounded-lg" >
+                                <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:pl-6 lg:pr-14 px-3 text-[.5rem] lg:text-[.9rem] ">
+                                    <p>{item?.date}</p>
+                                    <p className="-12">{item?.accountName}</p>
+                                    <p className="-28">{item?.accountNumber}</p>
+                                    <p className="-8">{item?.bureau}</p>
+                                    <p className="-8">${item?.balance}</p>
+                                    <p className="-7" onClick={() => handleDelete(item?.id)}><img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" /></p>
+                                </div>
+
+                            </div>
+                        ))
+                    }
+                </>
+                :
+                <>
+                    <NewCustomTableSkeleton />
+                </>
+            }
+
+            {/* {Array(10)
+                .fill(10)
+                .map((_,) => (
                 <div className="bg-white mx-1 md:mx-4 rounded-lg" >
                     <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:pl-6 lg:pr-14 px-3 text-[.5rem] lg:text-[.9rem] ">
                         <p>12/14/2021</p>
@@ -43,10 +139,10 @@ const AccountListTable = () => {
 
                 </div>
                 ))
-            }
+            } */}
 
             <div className="flex justify-end mx-4">
-                <p>Latest actions (Showing 01 to 09 of 259)</p>
+                <p>Latest actions (Showing 1 to 10 of {allAccounts?.length})</p>
             </div>
 
             <PaginationBtn />

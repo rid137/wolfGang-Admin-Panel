@@ -3,12 +3,23 @@ import { PiCurrencyDollarSimpleBold } from "react-icons/pi";
 import { TbTriangleInverted } from "react-icons/tb";
 import line from "../../assets/line.png";
 
-const DashboardStatistics = () => {
+interface DashboardStatisticsProps {
+    allClients: any
+    allDisputeAccounts: any
+}
+
+const DashboardStatistics: React.FC<DashboardStatisticsProps> = ({allClients, allDisputeAccounts}) => {
+
+    if (!allClients || allClients.length === 0) {
+        return <div><StatSkeleton /></div>;
+    }
+
+      
     return(
         <div className="grid grid-cols-1 xs lg:grid-cols-4 md:grid-cols-2 gap-8">
                 <div className="bg-[#E6E6E6] p-5 rounded-xl">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-[1.3rem] sm:text-xl font-bold">800</h2>
+                        <h2 className="text-[1.3rem] sm:text-xl font-bold">{allClients?.length}</h2>
                         <HiMiniUsers className="text-[1.5rem] sm:text-[2.4rem]" />
 
                     </div>
@@ -30,7 +41,7 @@ const DashboardStatistics = () => {
 
                 <div className="bg-[#E6E6E6] p-5 rounded-xl">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-[1.3rem] sm:text-xl font-bold">38</h2>
+                        <h2 className="text-[1.3rem] sm:text-xl font-bold">{allDisputeAccounts?.length}</h2>
                         <HiMiniUsers className="text-[1.5rem] sm:text-[2.4rem]" />
 
                     </div>
@@ -59,3 +70,47 @@ const DashboardStatistics = () => {
 }
 
 export default DashboardStatistics;
+
+
+const StatSkeleton = () => {
+    return(
+        <div className="grid grid-cols-1 xs lg:grid-cols-4 md:grid-cols-2 gap-8">
+            <div className="bg-[#E6E6E6] py-8 px-6 rounded-xl">
+                <div className="mb-4">
+                    <h2 className="bg-[#bbbaba] h-6  animate-pulse"></h2>
+
+                </div>
+                <p className="bg-[#bbbaba] h-10 animate-pulse"></p>
+
+            </div>
+
+            <div className="bg-[#E6E6E6] py-8 px-6 rounded-xl">
+                <div className="mb-4">
+                    <h2 className="bg-[#bbbaba] h-6 animate-pulse"></h2>
+
+                </div>
+                <p className="bg-[#bbbaba] h-10 animate-pulse"></p>
+
+            </div>
+
+            <div className="bg-[#E6E6E6] py-8 px-6 rounded-xl">
+                <div className="mb-4">
+                    <h2 className="bg-[#bbbaba] h-6 animate-pulse"></h2>
+
+                </div>
+                <p className="bg-[#bbbaba] h-10 animate-pulse"></p>
+
+            </div>
+
+            <div className="bg-[#E6E6E6] py-8 px-6 rounded-xl">
+                <div className="mb-4">
+                    <h2 className="bg-[#bbbaba] h-6 animate-pulse"></h2>
+
+                </div>
+                <p className="bg-[#bbbaba] h-10 animate-pulse"></p>
+
+            </div>
+
+        </div>
+    )
+}

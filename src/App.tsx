@@ -20,17 +20,21 @@ import EditProfile from './pages/settings/editProfile';
 import Security from './pages/settings/security';
 import NotFound from './pages/notFound';
 import SettingsLayout from './pages/settings/settingsLayout';
+import { AuthContextProvider } from './context/authcontext';
+import { Toaster } from 'react-hot-toast';
 
 
 const App = () => {
     return(
+        <AuthContextProvider>
+        <Toaster />
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<Layout />}>
                     <Route index element={<Dashboard/>} /> 
                     
                     <Route path='client_details' element={<ClientDetailsLayout />}>
-                        <Route index element={<ClientDetails/>} />
+                        <Route index path=':id' element={<ClientDetails/>} />
                         <Route path='billing' element={<Billing />} />
                     </Route>
 
@@ -38,7 +42,7 @@ const App = () => {
 
                     <Route path='dispute_center' element={<DisputeCenterLayout />}>
                         <Route index element={<DisputeCenter />} />
-                        <Route path='dispute_account_details' element={<DisputeAccountDetails />} />
+                        <Route path='dispute_account_details/:id' element={<DisputeAccountDetails />} />
                     </Route>
 
                     <Route path='letter_creation' element={<LetterCreationLayout />}>
@@ -62,6 +66,7 @@ const App = () => {
                 
             </Routes>
         </BrowserRouter>
+        </AuthContextProvider>
 
         
     );

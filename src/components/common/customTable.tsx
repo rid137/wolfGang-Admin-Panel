@@ -29,8 +29,8 @@ const CustomTable: React.FC<CustomTableProps> = ({firstTitle, secondTitle, third
 
                 {Array(10)
                         .fill(10)
-                        .map((_,) => (
-                    <div className="bg-white mx-1 sm:mx-4 rounded-lg" >
+                        .map((_, index) => (
+                    <div key={index} className="bg-white mx-1 sm:mx-4 rounded-lg" >
                         <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-1 xs:px-2 sm:px-3 text-[.6rem] sm:text-[.7rem] lg:text-[.9rem] ">
                             <p>{firstBody}</p>
                             <p>{secondBody}</p>

@@ -108,10 +108,10 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
 
                         </li>
                         <li onClick={logout}>
-                            <p  className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "logout" && "bg-white text-primary" }`} onClick={() => setActive("logout")}>
+                            <h4  className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "logout" && "bg-white text-primary" }`} onClick={() => setActive("logout")}>
                                 <IoLogOutOutline className="text-[1.1rem] sm:text-[1.4rem]" />
                                 <p className="text-[.9rem] sm:text-md">Log Out</p>
-                            </p>
+                            </h4>
                         </li>
                     </ul>
             </div>
