@@ -1,7 +1,6 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
-import { UserAuth } from "../../hooks/userAuthContext";
 import { BASE_URL } from "../../libs";
 import axios from "axios";
 // import NewCustomInput from "../../utils/newCustomInput";
@@ -22,7 +21,6 @@ export type FormFields = z.infer<typeof registerSchema>;
   
 
 const AddClientForm = () => {
-    const { setUserAuthData } = UserAuth();
 
     const {
         handleSubmit,
@@ -30,11 +28,11 @@ const AddClientForm = () => {
         reset,
         formState: { errors, isSubmitting },
     } = useForm<FormFields>({
-        defaultValues: {
-            email: "Xquizit52@gmail.com",
-            password: "password",
+        // defaultValues: {
+        //     email: "Xquizit52@gmail.com",
+        //     password: "password",
             
-        },
+        // },
     resolver: zodResolver(registerSchema),
     });
 
@@ -43,6 +41,9 @@ const AddClientForm = () => {
         // console.log("data", data)
         const formData = new FormData();
         
+        formData.append("firstName", data.firstName);
+        formData.append("lastName", data.lastName);
+        formData.append("phoneNumber", data.phoneNumber);
         formData.append("email", data.email);
         formData.append("password", data.password);
 
@@ -52,26 +53,26 @@ const AddClientForm = () => {
         //     console.log(pair[0] + ": " + pair[1]);
         // }
 
-        const toastId = toast.loading("Creating Manager Account");
+        const toastId = toast.loading("Creating Client Account");
 
         try {
-             const response = await axios.post(`${BASE_URL}/auth/signin`, formData, {
+             const response = await axios.post(`${BASE_URL}/auth/signup`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
                 }
             })
-            // console.log("response", response.data)
-            setUserAuthData(response.data)
-            toast.success("Manager Account Created successfully", { id: toastId });
+            console.log("response", response.data)
+            // setUserAuthData(response.data)
+            toast.success("Client Account Created successfully", { id: toastId });
             
     
         } catch (error: any) {
-           
+            toast.remove()     
+
             // console.log(error.message)
             toast.error('Error encountered. Try again');
 
-        }        
-
+        }   
         reset()
     };
 
@@ -138,7 +139,7 @@ const AddClientForm = () => {
             <p className="text-center mb-6">Enter the following details of the new client</p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
-                <div className="flex items-center justify-center md:flex-row flex-col gap-4 md:mx-4 lg:mx-0">
+                <div className="flex items-center justify-center md:flex-row flex-col gap-4 md:mx- lg:mx-0">
                     <div className="flex flex-col w-full md:w-1/3">
                         <label className="font-bold">First Name <span>*</span></label>
                         {/* <CustomInput placeholder="Enter first name" /> */}
@@ -249,7 +250,7 @@ const AddClientForm = () => {
 
                 </div>
                 <p className="my-3"><span>*</span> This field is mandatory</p>
-  */}
+                */}
                 <div className="flex items-center gap-4">
                     <input type="checkbox" name="" id="" className="w-5 h-5 rounded-md" />
                     <p>I agree to the terms and conditions provided by the company</p>

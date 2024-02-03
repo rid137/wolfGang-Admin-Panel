@@ -57,7 +57,7 @@ const App = () => {
 
                     <Route path='letter_creation' element={<LetterCreationLayout />}>
                         <Route index element={<LetterCreation/>} />
-                        <Route path='letter_creation_details' element={<LetterCreationDetails />} />
+                        <Route path='letter_creation_details/:id' element={<LetterCreationDetails />} />
                     </Route>
 
                     <Route path='payment' element={<Payment />} /> 

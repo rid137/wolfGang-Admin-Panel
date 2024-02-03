@@ -1,14 +1,14 @@
 // import CustomAuthPage from "./customAuthPage";
-import wolfgangLogo from "../../assets/wolfgangLogo.png";
+import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
+import axios from "axios";
+import toast from "react-hot-toast";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { BASE_URL } from "../../libs";
-import axios from "axios";
-import { useEffect } from "react";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
-import toast from "react-hot-toast";
+import wolfgangLogo from "../../assets/wolfgangLogo.png";
 
 
 const loginSchema = z.object({
@@ -54,11 +54,11 @@ const Login = () => {
         reset,
         formState: { isSubmitting },
     } = useForm<FormFields>({
-        defaultValues: {
-            email: "Manager@email.com",
-            password: "password1",
+        // defaultValues: {
+        //     email: "Manager@email.com",
+        //     password: "password1",
             
-        },
+        // },
     resolver: zodResolver(loginSchema),
     });
 

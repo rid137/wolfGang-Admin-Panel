@@ -208,7 +208,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Account Name</label>
                     {/* <CustomInput placeholder="Enter details" /> */}
-                    <input {...register('accountName')} type="text" className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('accountName')} type="text" className="inputCls" placeholder="Enter Account Name"  />
                     {errors.accountName && (
                         <p className="text-red-600">{errors.accountName.message}</p>
                     )}
@@ -217,7 +217,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Account Number</label>
                     {/* <CustomInput placeholder="Enter details" /> */}
-                    <input {...register('accountNumber')} type="text" className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('accountNumber')} type="text" className="inputCls" placeholder="Enter Account Number"  />
                     {errors.accountNumber && (
                         <p className="text-red-600">{errors.accountNumber.message}</p>
                     )}
@@ -226,7 +226,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Account Balance</label>
                     {/* <CustomInput placeholder="Enter details" /> */}
-                    <input {...register('accountBalance')} type="text" className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('accountBalance')} type="text" className="inputCls" placeholder="Enter Account Balance"  />
                     {errors.accountBalance && (
                         <p className="text-red-600">{errors.accountBalance.message}</p>
                     )}
