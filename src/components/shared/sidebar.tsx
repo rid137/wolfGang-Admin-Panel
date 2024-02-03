@@ -9,6 +9,10 @@ import { FaRegFileAlt } from "react-icons/fa";
 import { FaUser } from "react-icons/fa";
 import { IoLogOutOutline } from "react-icons/io5";
 import wolfgang from "../../assets/wolfgangLogo.png";
+import { AdminAuth } from "../../hooks/useAdminAuthContext";
+import axios from "axios";
+import { BASE_URL } from "../../libs";
+import { ManagerProfileType } from "../../types/managerObj";
 
 
 interface SidebarProps {
@@ -18,6 +22,40 @@ interface SidebarProps {
   
 const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
     const [active, setActive] = useState("dashboard")
+    const [managerData, setManagerData] = useState<ManagerProfileType | null>(null)
+
+    const { logout, adminAuthData } = AdminAuth();
+    const id = adminAuthData?.userId
+    const accessToken = adminAuthData?.token
+
+    const fetchManagerData = async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/user/getUser/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          const managersData = response.data;
+    
+          setManagerData(managersData);
+      
+          return managersData;
+        } catch (error) {
+          console.error('Error fetching all managers:', error);
+        }
+    };
+    
+    useEffect(() => {
+        const fetchManagerInfo = async () => {
+          await fetchManagerData();
+        };
+    
+        accessToken && fetchManagerInfo();
+      }, [accessToken]);
+
 
     useEffect(() => {
         document.body.style.overflow = isNavOpen ? 'hidden' : 'auto';
@@ -25,11 +63,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
         return () => {
           document.body.style.overflow = 'auto';
         };
-      }, [isNavOpen]);
+    }, [isNavOpen]);
 
-    const logout = ():void => {
+    const handleLogout = ():void => {
         if(window.confirm("Are you sure you want to logout?")) {
-            alert("You have logged out successfully")
+            logout()
         }
     }
 
@@ -103,11 +141,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
                         <li onClick={handleClick}>
                             <Link to={"/dashboard/settings"} className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "" && "bg-white text-primary" }`} onClick={() => setActive("")}>
                                 <FaUser className="text-[1rem] sm:text-[1.4rem] " />
-                                <p className="text-[.9rem] sm:text-md">Dianne Rusell</p>
+                                <p className="text-[.9rem] sm:text-md">{managerData?.firstName} {managerData?.lastName}</p>
                             </Link>
 
                         </li>
-                        <li onClick={logout}>
+                        <li onClick={handleLogout}>
                             <h4  className={`flex gap-3 items-center cursor-pointer py-[.3rem] rounded-r-full hover:bg-white hover:text-primary pl-6 sm:pl-10 ${active === "logout" && "bg-white text-primary" }`} onClick={() => setActive("logout")}>
                                 <IoLogOutOutline className="text-[1.1rem] sm:text-[1.4rem]" />
                                 <p className="text-[.9rem] sm:text-md">Log Out</p>

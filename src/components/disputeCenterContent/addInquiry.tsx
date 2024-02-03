@@ -70,8 +70,8 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
 
     useEffect(() => {
         const fetchPreviousInquiriesInfo = async () => {
-          const previousInquiriesInfo = await fetchPreviousInquiries();
-          console.log("previousInquiriesInfo", previousInquiriesInfo);
+          await fetchPreviousInquiries();
+        //   console.log("previousInquiriesInfo", previousInquiriesInfo);
         };
         
         accessToken && fetchPreviousInquiriesInfo();

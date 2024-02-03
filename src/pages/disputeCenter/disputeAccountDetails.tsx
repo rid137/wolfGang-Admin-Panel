@@ -31,6 +31,12 @@ export const addFicoScoreSchema = z.object({
         required_error: "transunion is required",
         invalid_type_error: "transunion must be a number",
       }),
+    // experian: z.string().max(850),
+    // equifax: z.string().max(850),    
+    // transunion: z.string({
+    //     required_error: "transunion is required",
+    //     invalid_type_error: "transunion must be a number",
+    //   }),
     
 });
   
@@ -74,15 +80,42 @@ const DisputeAccountDetails = () => {
 
     useEffect(() => {
         const fetchSingleClientInfo = async () => {
-          const clientInfo = await fetchSingleClient();
-          console.log("clientInfo", clientInfo);
+            await fetchSingleClient();
         };
 
-        
-
-        
         accessToken && fetchSingleClientInfo();
     }, [accessToken]);
+
+    const sendToProcessTeam = async () => {
+        const toastId = toast.loading("Sending to processing team");
+    
+        try {        
+            const response = await axios.post(`${BASE_URL}/pairing/pairAccount/${id}`, null, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+        
+            console.log("response", response.data);
+            
+            if (response.status === 200) {
+                toast.success("Sent successfully", { id: toastId });
+            } else {
+                toast.remove();
+                toast.error(response.data.message);
+            }
+        } catch (error: any) {
+            toast.remove();
+            if (error.message === 'Failed to fetch') {
+                toast.error('Network Error. Try again');
+            } else {
+                toast.error('Error encountered. Try again');
+            }
+            console.log(error.message);
+        }
+    };
+    
 
 
     const {
@@ -158,7 +191,7 @@ const DisputeAccountDetails = () => {
             </div>
 
             
-            <button className="btnXs mt-4 sm:mt-0">Send to Processing Team</button>
+            <button className="btnXs mt-4 sm:mt-0" onClick={sendToProcessTeam}>Send to Processing Team</button>
                 
             
         </div>

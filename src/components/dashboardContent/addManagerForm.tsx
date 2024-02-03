@@ -6,7 +6,6 @@ import { BASE_URL } from "../../libs";
 import axios from "axios";
 // import NewCustomInput from "../../utils/newCustomInput";
 import toast from "react-hot-toast";
-import { AdminAuth } from '../../hooks/useAdminAuthContext';
 // import { FormFields, registerSchema } from "./addClientForm";
 
 
@@ -22,7 +21,7 @@ type FormFields = z.infer<typeof registerManagerSchema>;
 
 interface AddManagerFormProps {
     fetchAllManagers: () => any
-  };
+};
   
   
 //   const CustomModal: React.FC<AddManagerFormProps> = ({children, smallWidth, closeModal}) => {
@@ -32,7 +31,7 @@ interface AddManagerFormProps {
 const AddManagerForm: React.FC<AddManagerFormProps> = ({fetchAllManagers}) => {
     // const { user, setUser, setReturnedUserData, userAuthData, setUserAuthData } = UserAuth();
 
-    const { setManagerObj  } = AdminAuth();
+    // const { setManagerObj  } = AdminAuth();
 
     const {
         handleSubmit,
@@ -70,7 +69,7 @@ const AddManagerForm: React.FC<AddManagerFormProps> = ({fetchAllManagers}) => {
         
             if (response.status === 200) {
                 console.log("json response", response.data);
-                setManagerObj(response.data);
+                // setManagerObj(response.data);
                 toast.success("Manager Account Created successfully", { id: toastId });
                 await fetchAllManagers()
             } else {

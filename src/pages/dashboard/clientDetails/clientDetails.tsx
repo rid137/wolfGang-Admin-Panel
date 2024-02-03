@@ -13,7 +13,10 @@ import { AdminAuth } from "../../../hooks/useAdminAuthContext";
 const ClientDetails = () => {
     const [showClientDetails, setShowClientDetails] = useState<boolean>(false);
     const [singleClient, setSingleClient] = useState<any>();
+    const [allScores, setAllScores] = useState<any>()
+    const [isEditing, setIsEditing] = useState<boolean>(false);
 
+    
     const { id } = useParams();
 
     const navigate = useNavigate();
@@ -41,7 +44,6 @@ const ClientDetails = () => {
         }
     };
 
-    const [allScores, setAllScores] = useState<any>()
 
 
     const fetchAllScores = async () => {
@@ -83,6 +85,7 @@ const ClientDetails = () => {
 
     const handleClick = () => {
         setShowClientDetails(!showClientDetails)
+        setIsEditing(false)
     }
 
     const goBack = () => {
@@ -112,7 +115,7 @@ const ClientDetails = () => {
                 {
                     showClientDetails ? 
                    <div className="">
-                        <button className="btnXs ml-3">Edit</button>
+                        <button className="btnXs ml-3" onClick={() => setIsEditing(true)}>{isEditing ? "Save" : "Edit"}</button>
                         <button className="btnXs ml-3" onClick={handleClick}>Close</button>
                    </div> :
                     <div className="flex sm:block flex-wrap gap-3">
@@ -149,50 +152,50 @@ const ClientDetails = () => {
                 <div className="bg-[#E7E7E7] p-4 mt-6">
                     <form action="">
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col">
-                            <CustomLabelInput label="Name" text={`${singleClient?.firstName} ${singleClient?.middleName} ${singleClient?.lastName}`}/>
-                            <CustomLabelInput label="Email" text={`${singleClient?.email}`}/>
-                            <CustomLabelInput label="Status" text={`${singleClient?.status ? singleClient?.status : "active"}`} />
+                            <CustomLabelInput isEditing={isEditing} label="Name" text={`${singleClient?.firstName} ${singleClient?.middleName} ${singleClient?.lastName}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Email" text={`${singleClient?.email}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Status" text={`${singleClient?.status ? singleClient?.status : "active"}`} />
                         </div>
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-6">
-                            <CustomLabelInput label="Account manager" text="John Coole"/>
-                            <CustomLabelInput label="Phone" text={`${singleClient?.phone}`}/>
-                            <CustomLabelInput label="Date Created" text={DateTime.fromISO(singleClient?.createdAt).toLocaleString(DateTime.DATE_MED)}/>
+                            <CustomLabelInput isEditing={isEditing} label="Account manager" text="John Coole"/>
+                            <CustomLabelInput isEditing={isEditing} label="Phone" text={`${singleClient?.phone}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Date Created" text={DateTime.fromISO(singleClient?.createdAt).toLocaleString(DateTime.DATE_MED)}/>
                         
                         </div> 
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-6">
-                            <CustomLabelInput label="Verified date" text={DateTime.fromISO(singleClient?.updatedAt).toLocaleString(DateTime.DATE_MED)}/>
-                            <CustomLabelInput label="Address" text={`${singleClient?.streetAddr}`}/>
-                            <CustomLabelInput label="Last Payment" text="20/03/2023"/>
+                            <CustomLabelInput isEditing={isEditing} label="Verified date" text={DateTime.fromISO(singleClient?.updatedAt).toLocaleString(DateTime.DATE_MED)}/>
+                            <CustomLabelInput isEditing={isEditing} label="Address" text={`${singleClient?.streetAddr}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Last Payment" text="20/03/2023"/>
                         
                         </div>
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-6">
-                            <CustomLabelInput label="LTV" text="$1,283.00"/>
-                            <CustomLabelInput label="SSN" text={`${singleClient?.ssn}`}/>
-                            <CustomLabelInput label="Goal" text="Higher credit score"/>
+                            <CustomLabelInput isEditing={isEditing} label="LTV" text="$1,283.00"/>
+                            <CustomLabelInput isEditing={isEditing} label="SSN" text={`${singleClient?.ssn}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Goal" text="Higher credit score"/>
                         
                         </div>
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-6">
-                            <CustomLabelInput label="DOB" text={`${singleClient?.dob}`}/>
-                            <CustomLabelInput label="Next Round" text="21/04/2023"/>
-                            <CustomLabelInput label="Date of Payment" text="6/11/2023"/>
+                            <CustomLabelInput isEditing={isEditing} label="DOB" text={`${singleClient?.dob}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Next Round" text="21/04/2023"/>
+                            <CustomLabelInput isEditing={isEditing} label="Date of Payment" text="6/11/2023"/>
                         
                         </div>
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-6">
-                            <CustomLabelInput label="Experian Score" text={`${singleClient?.experianScore}`}/>
-                            <CustomLabelInput label="Equifax Score" text={`${singleClient?.equifaxScore}`}/>
-                            <CustomLabelInput label="Transunion Score" text={`${singleClient?.transunionScore}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Experian Score" text={`${singleClient?.experianScore}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Equifax Score" text={`${singleClient?.equifaxScore}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Transunion Score" text={`${singleClient?.transunionScore}`}/>
                         
                         </div>
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-6">
-                            <CustomLabelInput label="Total Accounts" text="741"/>
-                            <CustomLabelInput label="Total Inquires" text="751"/>
-                            <CustomLabelInput label="ID Combined" text="Analise.pdf"/>
+                            <CustomLabelInput isEditing={isEditing} label="Total Accounts" text="741"/>
+                            <CustomLabelInput isEditing={isEditing} label="Total Inquires" text="751"/>
+                            <CustomLabelInput isEditing={isEditing} label="ID Combined" text="Analise.pdf"/>
                         
                         </div>
 

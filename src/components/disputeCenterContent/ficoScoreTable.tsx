@@ -39,8 +39,8 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
 
   useEffect(() => {
     const fetchAllScoresInfo = async () => {
-      const allScoresInfo = await fetchAllScores();
-      console.log("allScoresInfo", allScoresInfo);
+      await fetchAllScores();
+      // console.log("allScoresInfo", allScoresInfo);
     };
     
     accessToken && fetchAllScoresInfo();

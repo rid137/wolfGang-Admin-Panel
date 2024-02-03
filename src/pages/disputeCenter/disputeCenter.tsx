@@ -14,6 +14,7 @@ const DisputeCenter = () => {
 
   const { adminAuthData  } = AdminAuth();
   const accessToken = adminAuthData?.token;
+  const id = adminAuthData?.userId
   // const id = managerObj?.id
   // console.log("manId", managerObj)
 
@@ -22,7 +23,7 @@ const DisputeCenter = () => {
   const fetchClientForDispute = async () => {
     try {
       const response = await axios.get(
-        `${BASE_URL}/admin/getClientForDispute/43`,
+        `${BASE_URL}/admin/getClientForDispute/${id}`,
         {
           headers: {
             Authorization: `Bearer ${accessToken}`,
@@ -31,7 +32,7 @@ const DisputeCenter = () => {
       );
       const clientsData = response.data;
       setAllClients(clientsData);
-      console.log("clientDetails", clientsData)
+      // console.log("clientDetails", clientsData)
 
       return clientsData;
     } catch (error) {

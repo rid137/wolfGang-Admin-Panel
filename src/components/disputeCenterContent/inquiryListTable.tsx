@@ -40,8 +40,8 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
 
   useEffect(() => {
       const fetchallInquiriesInfo = async () => {
-        const allInquiriesInfo = await fetchAllInquiries();
-        console.log("allInquiriesInfo", allInquiriesInfo);
+        await fetchAllInquiries();
+        // console.log("allInquiriesInfo", allInquiriesInfo);
       };
       
       accessToken && fetchallInquiriesInfo();
