@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { MdOutlinePayment } from "react-icons/md";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -24,6 +24,8 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
     const [active, setActive] = useState("dashboard")
     const [managerData, setManagerData] = useState<ManagerProfileType | null>(null)
 
+    // console.log("manager" ,managerData)
+
     const { logout, adminAuthData } = AdminAuth();
     const id = adminAuthData?.userId
     const accessToken = adminAuthData?.token
@@ -44,7 +46,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
       
           return managersData;
         } catch (error) {
-          console.error('Error fetching all managers:', error);
+          console.error('Error fetching manager:', error);
         }
     };
     
@@ -71,17 +73,41 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
         }
     }
 
-    const location = useLocation()
+    // const location = useLocation()
     
-    useEffect(() => {
-        if (location.pathname === "/client_details") {
-          setActive("dashboard");
-        }
+    
+    // useEffect(() => {
+    //     // if (location.pathname === "/client_details") {
+    //     //   setActive("dashboard");
+    //     // }
 
-        else if (location.pathname === "/dispute_center/dispute_account_details") {
-          setActive("dispute_center");
-        }
-      }, [location.pathname]);
+    //     // else if (location.pathname === "/dashboard/dispute_center") {
+    //     //   setActive("dispute_center");
+    //     // }
+
+    //     let rangeText;
+    //     switch (location.pathname) {
+    //         case "/dashboard/client_details":
+    //             setActive("dashboard");
+    //             break;
+    //         case "/dashboard/dispute_center":
+    //             setActive("dispute_center");
+    //             break;
+    //         case "/dashboard/letter_creation":
+    //             setActive("letter_creation");
+    //             break;
+    //     // case 4:
+    //         //     rangeText = `(${baseValue}-${baseValue + 3})`;
+    //         //     break;
+    //         // case 5:
+    //         //     rangeText = `(${baseValue}-${baseValue + 4})`;
+    //         //     break;
+    //         // default:
+    //         //     setActive("dashboard");
+    //         //     break;
+    //     }
+
+    //   }, [location.pathname]);
 
     
     return (

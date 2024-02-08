@@ -4,7 +4,7 @@ import { FaArrowLeft } from "react-icons/fa6";
 const Policy = () => {
     return(
         <>
-             <Link to='/settings' className="flex items-center gap-2 my-4 cursor-pointer">
+             <Link to='/dashboard/settings' className="flex items-center gap-2 my-4 cursor-pointer">
                 <FaArrowLeft />
                 <h2 className="font-bold text-[1.4rem] mb-">Privacy policy</h2>        
             </Link>

@@ -20,20 +20,38 @@ import EditProfile from './pages/settings/editProfile';
 import Security from './pages/settings/security';
 import NotFound from './pages/notFound';
 import SettingsLayout from './pages/settings/settingsLayout';
-import { AuthContextProvider } from './context/authcontext';
+// import { AuthContextProvider } from './context/authcontext';
 import { Toaster } from 'react-hot-toast';
 import Login from './components/authentication/login';
 import AuthLayout from './components/authentication/authLayout';
 import { AdminAuthContextProvider } from './context/adminAuthContext';
 import ProtectedPage from './components/authentication/protectedPage';
+// import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
+// import 'primereact/resources/themes/saga-blue/theme.css';
+// import 'primereact/resources/primereact.min.css';
+// import 'primeicons/primeicons.css';
+
+
+
+
+
 
 
 const App = () => {
     return(
         <AdminAuthContextProvider>
+        {/* <PrimeReactProvider > */}
 
-        <AuthContextProvider>
-        <Toaster />
+        {/* <AuthContextProvider> */}
+        <Toaster
+            position="top-right"
+            reverseOrder={false}
+            toastOptions={{
+            className: 'toaster',
+            }}
+        />
+        {/* <PrimeReactProvider value={{ unstyled: true }}> */}
+
         <BrowserRouter>
             <Routes>
                 <Route path='/' element={<AuthLayout />}>
@@ -41,7 +59,7 @@ const App = () => {
                 </Route>
 
                 <Route path='/dashboard' element={<ProtectedPage> <Layout /> </ProtectedPage>}>
-                    <Route index element={<Dashboard/>} /> 
+                    <Route index element={<Dashboard/>} />
                     
                     <Route path='client_details' element={<ClientDetailsLayout />}>
                         <Route index path=':id' element={<ClientDetails/>} />
@@ -76,7 +94,9 @@ const App = () => {
                 
             </Routes>
         </BrowserRouter>
-        </AuthContextProvider>
+        {/* </PrimeReactProvider> */}
+
+        {/* </AuthContextProvider> */}
         </AdminAuthContextProvider>
 
 

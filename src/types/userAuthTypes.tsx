@@ -3,4 +3,5 @@ export interface UserAuthDataType {
     refreshToken: string
     userId: number
     email: string
+    role: string
 }

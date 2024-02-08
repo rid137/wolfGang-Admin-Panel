@@ -6,7 +6,7 @@ import avatar from '../../assets/avatar.jpg'
 const EditProfile = () => {
     return(
         <>
-            <Link to='/settings' className="flex items-center gap-2 my-4 cursor-pointer">
+            <Link to='/dashboard/settings' className="flex items-center gap-2 my-4 cursor-pointer">
                 <FaArrowLeft />
                 <h2 className="font-bold text-[1.4rem] mb-">Edit Profile</h2>           
             </Link>

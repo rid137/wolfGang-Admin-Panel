@@ -52,11 +52,19 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
 
     const navigate = useNavigate();
 
+    // const handleCheckboxChange = (name: string) => {
+    //     setCheckboxes(prevCheckboxes =>
+    //         prevCheckboxes.map(checkbox =>
+    //         checkbox.name === name ? { ...checkbox, checked: true } : { ...checkbox, checked: false }
+    //         )
+    //     );
+    // };
+
     const handleCheckboxChange = (name: string) => {
         setCheckboxes(prevCheckboxes =>
-            prevCheckboxes.map(checkbox =>
-            checkbox.name === name ? { ...checkbox, checked: true } : { ...checkbox, checked: false }
-            )
+          prevCheckboxes.map(checkbox =>
+            checkbox.name === name ? { ...checkbox, checked: !checkbox.checked } : checkbox
+          )
         );
     };
 
@@ -75,7 +83,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
         const selectedCheckbox = checkboxes.find(checkbox => checkbox.checked);
 
         if (!selectedCheckbox?.name) {
-          console.log('Selected checkbox:', selectedCheckbox?.name);
+        //   console.log('Selected checkbox:', selectedCheckbox?.name);
           toast.error("Select a Bureau")
           return
         }
@@ -83,7 +91,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
 
         const currentDateTime = DateTime.now();
         const formattedDate = currentDateTime.toFormat('yyyy-MM-dd');
-        console.log(formattedDate);
+        // console.log(formattedDate);
 
         const isDispute = true
 
@@ -106,7 +114,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
                 },
             });
         
-            console.log("response", response.data);
+            // console.log("response", response.data);
             
             if (response.status === 200) {
                 toast.success("Scores added successfully", { id: toastId });
@@ -151,7 +159,8 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
 
     useEffect(() => {
         const fetchDisputeAccountInfo = async () => {
-          await fetchDisputeAccount();
+          const allDis = await fetchDisputeAccount();
+        //   console.log("allDis", allDis)
         };
         
         accessToken && fetchDisputeAccountInfo();
@@ -268,27 +277,27 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
                 </div>
 
                 {
-                    allDisputeAccounts?.length > 0 ? 
-                        <>
-                            {
-                                allDisputeAccounts?.slice(-7).map((item: any) => (
-                                    <div key={item.id} className="bg-white mx-2 sm:mx-4 rounded-lg" >
-                                        <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-3 text-[.6rem] lg:text-[.9rem]">
-                                            <p>{item?.accountName}</p>
-                                            <p>{item?.accountNumber}</p>
-                                            <p>{item?.bureau}</p>
-                                            <p>${item?.balance}</p>
-                                            <button className='bg-primary text-white py-1 px-1 xs:py-1 xs:px-1 rounded-xl text-[.6rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button>
-                                        </div>
-                                    </div>
-                                ))
-                            }
-                        </>
-                        :
-                        <>
-                            <NewCustomTableSkeleton />
-                        </>
+                    allDisputeAccounts ? (
+                        allDisputeAccounts.length > 0 ? (
+                            allDisputeAccounts.slice(-7).map((item: any) => (
+                                <div key={item.id} className="bg-white mx-2 sm:mx-4 rounded-lg">
+                                    <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-3 text-[.6rem] lg:text-[.9rem]">
+                                        <p>{item?.accountName}</p>
+                                        <p>{item?.accountNumber}</p>
+                                        <p>{item?.bureau}</p>
+                                        <p>${item?.balance}</p>
+                                        <button className='bg-primary text-white py-1 px-1 xs:py-1 xs:px-1 rounded-xl text-[.6rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button>
+                                    </div>                
+                                </div>
+                            ))
+                        ) : (
+                            <p className="ml-5 mt-4">No Dispute Account Available </p>
+                        )
+                    ) : (
+                        <NewCustomTableSkeleton />
+                    )
                 }
+
 
                 {/* {Array(3)
                         .fill(3)

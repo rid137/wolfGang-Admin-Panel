@@ -16,6 +16,7 @@ import InquiryListTable from "../../components/disputeCenterContent/inquiryListT
 // import { UserAuth } from "../../hooks/userAuthContext";
 import { BASE_URL } from "../../libs";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
+import { ManagerProfileType } from "../../types/managerObj";
 
 
 export const addFicoScoreSchema = z.object({
@@ -47,7 +48,10 @@ const DisputeAccountDetails = () => {
 
     const [singleClient, setSingleClient] = useState<any>();
 
-    const { id } = useParams()
+    const { id } = useParams();
+
+    const [allScores, setAllScores] = useState<any>()
+    const [allAccounts, setAllAccounts] = useState<ManagerProfileType[]>([])
 
 
 
@@ -78,13 +82,68 @@ const DisputeAccountDetails = () => {
         }
     };
 
+    const fetchAllScores = async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/scores/getall/${id}?clientId=${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+                // 'Content-Type': 'application/json',
+              },
+            }
+          );
+          const allScoresData = response.data;
+    
+            setAllScores(allScoresData)
+            await fetchAllScores();
+    
+          return allScoresData;
+        } catch (error) {
+          console.error('Error fetching all clients:', error);
+        }
+      };
+
+      const fetchAllAccounts = async () => {
+        try {
+          const response = await axios.get(
+            `${BASE_URL}/account/findUnattendedAccounts/${id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+          const allAccountsData = response.data;
+
+          setAllAccounts(allAccountsData);
+      
+          return allAccountsData;
+        } catch (error) {
+          console.error('Error fetching all clients:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchSingleClientInfo = async () => {
             await fetchSingleClient();
         };
 
+        const fetchAllScoresInfo = async () => {
+            await fetchAllScores();
+            // console.log("allScoresInfo", allScoresInfo);
+        };
+
+        const fetchAllAccountsInfo = async () => {
+        await fetchAllAccounts();
+        };
+        
+        accessToken && fetchAllAccountsInfo();
+
         accessToken && fetchSingleClientInfo();
+          accessToken && fetchAllScoresInfo();
     }, [accessToken]);
+
 
     const sendToProcessTeam = async () => {
         const toastId = toast.loading("Sending to processing team");
@@ -97,7 +156,7 @@ const DisputeAccountDetails = () => {
                 },
             });
         
-            console.log("response", response.data);
+            // console.log("response", response.data);
             
             if (response.status === 200) {
                 toast.success("Sent successfully", { id: toastId });
@@ -128,7 +187,7 @@ const DisputeAccountDetails = () => {
     });
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        console.log(data);
+        // console.log(data);
 
         const currentTimestamp = Date.now();
         const currentDateTime = DateTime.fromMillis(currentTimestamp);
@@ -153,10 +212,11 @@ const DisputeAccountDetails = () => {
                 },
             });
         
-            console.log("response", response.data);
+            // console.log("response", response.data);
             
             if (response.status === 200) {
                 toast.success("Scores added successfully", { id: toastId });
+                await fetchAllAccounts();
             } else {
                 toast.remove();
                 toast.error(response.data.message);
@@ -317,7 +377,7 @@ const DisputeAccountDetails = () => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Experian FICO Score</label>
                     {/* <CustomInput placeholder="Enter Score" /> */}
-                    <input {...register('experian')} type="text" className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('experian')} type="number" max='850'  className="inputCls" placeholder="Enter Score"  />
                     {errors.experian && (
                         <p className="text-red-600">{errors.experian.message}</p>
                     )}
@@ -326,7 +386,7 @@ const DisputeAccountDetails = () => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Equifax FICO Score</label>
                     {/* <CustomInput placeholder="Enter Score" /> */}
-                    <input {...register('equifax')} type="text" className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('equifax')} type="number" max='850' className="inputCls" placeholder="Enter Score"  />
                     {errors.equifax && (
                         <p className="text-red-600">{errors.equifax.message}</p>
                     )}
@@ -335,7 +395,7 @@ const DisputeAccountDetails = () => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Transunion FICO Score</label>
                     {/* <CustomInput placeholder="Enter Score" /> */}
-                    <input {...register('transunion')} type="text" className="inputCls" placeholder="Enter Score" />
+                    <input {...register('transunion')} type="number" max='850' className="inputCls" placeholder="Enter Score" />
                     {errors.transunion && (
                         <p className="text-red-600">{errors.transunion.message}</p>
                     )}
@@ -351,8 +411,8 @@ const DisputeAccountDetails = () => {
 
         <AddDisputeAccount id={id as string} accessToken={accessToken as string} />
         <AddInquiry id={id as string} accessToken={accessToken as string} />
-        <FicoScoreTable id={id as string} accessToken={accessToken as string} />
-        <AccountListTable id={id as string} accessToken={accessToken as string} />
+        <FicoScoreTable id={id as string} accessToken={accessToken as string} allScores={allScores} />
+        <AccountListTable id={id as string} accessToken={accessToken as string} allAccounts={allAccounts} fetchAllAccounts={fetchAllAccounts} />
         <InquiryListTable id={id as string} accessToken={accessToken as string} />
     </section>
   )

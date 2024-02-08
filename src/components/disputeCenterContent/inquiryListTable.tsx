@@ -16,7 +16,6 @@ interface AddInquiryProps {
 const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
   const [allInquiries, setAllInquiries] = useState<any>()
 
-
   const fetchAllInquiries = async () => {
     try {
       const response = await axios.get(
@@ -34,7 +33,7 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
   
       return allInquiriesData;
     } catch (error) {
-      console.error('Error fetching all clients:', error);
+      console.error('Error fetching all inquiries:', error);
     }
   };
 
@@ -49,8 +48,9 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
 
 
   const handleDelete = async (id: string | number) => {
-    if(window.confirm('Are you sure you want to delete the blog'))  {
-        toast.loading("Deleting FICO score")
+    if(window.confirm('Are you sure you want to delete this inquiry?'))  {
+
+        const toastId = toast.loading("Deleting inquiry");
 
         try {
             const response = await axios.delete(
@@ -63,17 +63,18 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
             );
 
             if (response.status === 200) {
-                toast.success('FICO score deleted successfully')
+                toast.success('Inquiry deleted successfully', { id: toastId })
                 await fetchAllInquiries();
             }
 
         } catch (error) {
-            toast.error('FICO score deleted successfully')
-            console.error('Error fetching all clients:', error);
+          toast.remove()
+            toast.error('Something went wrong')
+            console.error('Error deleting account:', error);
         }
-
-        toast.remove()
-    }        
+        
+      }        
+      // toast.remove()
   }
 
 
@@ -92,6 +93,28 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
             </div>
 
             {
+                    allInquiries ? (
+                        allInquiries.length > 0 ? (
+                            allInquiries.map((item: any, index: number) => (
+                              <div key={index} className="bg-white mx-2 sm:mx-4 rounded-lg" >
+                                <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-2 text-[.7rem] lg:text-[.9rem]">
+                                    <p>{item?.name}</p>
+                                    <p>{item?.date}</p>
+                                    <p>{item.bureau}</p>
+                                    {/* <button className='bg-primary text-white p-1 sm:py-2 sm:px-3 rounded-xl text-[.7rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button> */}
+                                    <img src={trash} className='cursor-pointer w-3 h-3' alt="delete" onClick={() => handleDelete(item?.id)} />
+                                </div>
+                            </div>
+                            ))
+                        ) : (
+                            <p className="ml-5 mt-4 text-left mb-10">No Inquiries Available </p>
+                        )
+                    ) : (
+                        <NewCustomTableSkeleton />
+                    )
+                }
+
+            {/* {
               allInquiries?.length > 0 ?
               <>
                 {
@@ -102,7 +125,6 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
                             <p>{item?.name}</p>
                             <p>{item?.date}</p>
                             <p>{item.bureau}</p>
-                            {/* <button className='bg-primary text-white p-1 sm:py-2 sm:px-3 rounded-xl text-[.7rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button> */}
                             <img src={trash} className='cursor-pointer w-3 h-3' alt="delete" onClick={() => handleDelete(item?.id)} />
                         </div>
                     </div>
@@ -113,10 +135,10 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
               <>
                 <NewCustomTableSkeleton />
               </>
-            }
+            } */}
       </div>
       <div className="flex justify-end mx-4">
-        <p>Latest actions (Showing 01 to 09 of {allInquiries?.length})</p>
+        {/* <p>Latest actions (Showing 01 to 09 of {allInquiries?.length})</p> */}
       </div>
 
       <PaginationBtn />
