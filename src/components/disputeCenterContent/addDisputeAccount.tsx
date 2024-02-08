@@ -159,7 +159,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
 
     useEffect(() => {
         const fetchDisputeAccountInfo = async () => {
-          const allDis = await fetchDisputeAccount();
+          await fetchDisputeAccount();
         //   console.log("allDis", allDis)
         };
         
