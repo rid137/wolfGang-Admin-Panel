@@ -6,21 +6,23 @@ import axios from "axios";
 import { BASE_URL } from "../../libs";
 import NewCustomTable from "../../components/common/newCustomTable";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
+import { Roles } from "../dashboard/dashboard";
 
 
 const DisputeCenter = () => {
-  const [allClients, setAllClients] = useState([]);
+  const [disputeAccounts, setDisputeAccounts] = useState([]);
   const navigate = useNavigate();
 
   const { adminAuthData  } = AdminAuth();
   const accessToken = adminAuthData?.token;
   const id = adminAuthData?.userId
+  const role = adminAuthData?.role
   // const id = managerObj?.id
   // console.log("manId", managerObj)
 
   // `${BASE_URL}/admin/getClientForDispute/${}`,
 
-  const fetchClientForDispute = async () => {
+  const fetchDisputeAccountsForManager = async () => {
     try {
       const response = await axios.get(
         `${BASE_URL}/admin/getClientForDispute/${id}`,
@@ -31,25 +33,46 @@ const DisputeCenter = () => {
         }
       );
       const clientsData = response.data;
-      setAllClients(clientsData);
+      setDisputeAccounts(clientsData);
       // console.log("clientDetails", clientsData)
 
       return clientsData;
     } catch (error) {
-        console.error('Error fetching all clients:', error);
+        console.error('Error fetching dispute accounts:', error);
       }
   };
 
+  const fetchDisputeAccountsForAdmin = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/admin/getAllClientsForDispute`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const clientsData = response.data;
+      setDisputeAccounts(clientsData);
+      // console.log("clientDetails", clientsData)
+
+      return clientsData;
+    } catch (error) {
+        console.error('Error fetching dispute accounts:', error);
+      }
+  };
+
+
   useEffect(() => {
-    const fetchClientForDisputeInfo = async () => {
-      await fetchClientForDispute();
+    const fetchDisputeAccountsForManagerInfo = async () => {
+      role === Roles.Admin ? await fetchDisputeAccountsForAdmin() : await fetchDisputeAccountsForManager();
     };
     
-    accessToken && fetchClientForDisputeInfo();
+    accessToken && fetchDisputeAccountsForManagerInfo();
   }, [accessToken]);
 
 
-  const mappedClientsData = allClients.slice(0, 10).map((item: any) => ({
+  const mappedClientsData = disputeAccounts.slice(0, 10).map((item: any) => ({
     id: item.id,
     firstBody: `${item.firstName}   ${item.lastName}`,
     secondBody: item.status ? item.status : 'active',
@@ -84,7 +107,7 @@ const DisputeCenter = () => {
         titles={["Name", "Status", "Refresh Date", "Action"]}
         data={mappedClientsData}
         isButton={true}
-        totalLength={allClients?.length}
+        totalLength={disputeAccounts?.length}
         handleBtnClick={(id: number) => goToDisputeAccounttDetails(id)}
       />
 

@@ -17,9 +17,28 @@ interface NewCustomTableProps {
 
 const NewCustomTable: React.FC<NewCustomTableProps> = ({ titles, data, isButton, colored, totalLength, handleBtnClick }) => {
 
+    // console.log("data", data.length)
+
     if (!data || data.length === 0) {
         return <div><NewCustomTableSkeleton /></div>;
     }
+
+    // const bet = () => {
+    //     <NewCustomTableSkeleton />
+    //     if (data.length === 0) {
+    //         return <div className="mb-10">No data Available</div>;
+    //     }
+    //     return;
+    // }
+
+    // useEffect(() => {
+        
+
+    //     // if(data?.length === 0) {
+    //     //     // return <div className="mb-10">No Data Available</div>
+    //     // }
+    //     bet()
+    // }, [])
 
       
     return (

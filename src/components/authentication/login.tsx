@@ -1,5 +1,4 @@
 // import CustomAuthPage from "./customAuthPage";
-import { useEffect } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { SubmitHandler, useForm } from "react-hook-form";
 import axios from "axios";
@@ -15,9 +14,8 @@ const loginSchema = z.object({
     email: z.string().min(5, { message: "Must be 5 or more characters long" }),
     password: z.string().min(5, { message: "Must be 5 or more characters long" }),
 });
-  
-type FormFields = z.infer<typeof loginSchema>;
 
+type FormFields = z.infer<typeof loginSchema>;
 
 
 const Login = () => {
@@ -30,8 +28,7 @@ const Login = () => {
 
     
 
-
-    useEffect(() => {
+    // useEffect(() => {
         // const retrivedUserData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) as string)
         // console.log(retrivedUserData)
 
@@ -44,7 +41,7 @@ const Login = () => {
         //     });
         // }
 
-    }, [])
+    // }, [])
     // console.log("userData", userData?.email)
 
 
@@ -65,17 +62,17 @@ const Login = () => {
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
         
-        console.log("data", data)
+        // console.log("data", data)
         const formData = new FormData();
         
         formData.append("email", data.email);
         formData.append("password", data.password);
 
-        console.log("formData", formData)
-        console.log("FormData contents:");
-        for (let pair of formData.entries()) {
-            console.log(pair[0] + ": " + pair[1]);
-        }
+        // console.log("formData", formData)
+        // console.log("FormData contents:");
+        // for (let pair of formData.entries()) {
+        //     console.log(pair[0] + ": " + pair[1]);
+        // }
 
 
         try {
@@ -87,7 +84,7 @@ const Login = () => {
                     'Content-Type': 'application/json',
                 }
             })
-            console.log("response", response.data)
+            // console.log("response", response.data)
             setAdminAuthData(response.data)
             // toast.success("Log In Successful", { autoClose: 3000 } as ToastOptions);
             toast.success("Log In Successful", { id: toastId });
@@ -105,7 +102,7 @@ const Login = () => {
             toast.remove()
             if (error.message === 'Failed to fetch') toast.error('Network Error. Try again')
             else toast.error('Error encountered. Try again')
-            console.log(error.message)
+            // console.log(error.message)
         }
         // toast.remove();
 

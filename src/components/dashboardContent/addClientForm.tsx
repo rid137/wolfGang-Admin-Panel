@@ -61,10 +61,11 @@ const AddClientForm = () => {
                     'Content-Type': 'application/json',
                 }
             })
-            console.log("response", response.data)
+            // console.log("response", response.data)
             // setUserAuthData(response.data)
-            toast.success("Client Account Created successfully", { id: toastId });
-            
+            if(response.statusText === "OK") {
+                toast.success("Client Account Created successfully", { id: toastId });
+            }
     
         } catch (error: any) {
             toast.remove()     

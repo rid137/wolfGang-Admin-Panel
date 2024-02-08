@@ -10,7 +10,22 @@ import { BASE_URL } from "../../libs";
 // import { UserAuth } from "../../hooks/userAuthContext";
 import NewCustomTable from "../../components/common/newCustomTable";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
+// import { Button } from "primereact/button";
+// import { DataTable } from "primereact/datatable";
+// import { Column } from "primereact/column";
 // const NewCustomTable = React.lazy(() => import('../../components/common/newCustomTable'));
+// import { Button } from 'primereact/button';    
+
+// import { DataTable } from 'primereact/datatable';
+// import { Column } from 'primereact/column';
+                                 
+
+
+
+export enum Roles {
+  Manager = "ROLE_MANAGER",
+  Admin = "ROLE_ADMIN"
+}
 
 
 const Dashboard = () => {
@@ -25,6 +40,7 @@ const Dashboard = () => {
   const { adminAuthData } = AdminAuth();
   const accessToken = adminAuthData?.token;
   const id = adminAuthData?.userId;
+  const role = adminAuthData?.role
 
   const goToClientDetails = (id: number) => {
     navigate(`client_details/${id}`)
@@ -33,6 +49,26 @@ const Dashboard = () => {
   const goToAdminDetails = () => {
     navigate("admin_details")
   }
+
+  const fetchClientsForManager = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/admin/getClientsForManager/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const clientsData = response.data;
+
+      setAllClients(clientsData);
+  
+      return clientsData;
+    } catch (error) {
+      console.error('Error fetching all clients:', error);
+    }
+  };
 
   const fetchAllClients = async () => {
     try {
@@ -96,12 +132,12 @@ const Dashboard = () => {
 
   useEffect(() => {
     const fetchAllClientsInfo = async () => {
-      await fetchAllClients();
+      role === Roles.Admin ? await fetchAllClients() : await fetchClientsForManager()
     };
 
     const fetchAllManagersInfo = async () => {
-      const allman = await fetchAllManagers();
-      console.log("alllman", allman)
+      await fetchAllManagers();
+      // console.log("alllman", allman)
     };
 
     const fetchDisputeAccountInfo = async () => {
@@ -120,7 +156,7 @@ const Dashboard = () => {
   thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
   fourthBody: "Details",
   }));
-
+  // slice(0, 10)
   const mappedManagersData = allManagers.slice(0, 10).map((item: any) => ({
     id: item.id,
     firstBody: `${item.firstName}   ${item.lastName}`,
@@ -136,12 +172,12 @@ const Dashboard = () => {
 
   return(
     <section>
-      <DashboardStatistics allClients={allClients} allDisputeAccounts={allDisputeAccounts} />
-
+      {adminAuthData && role === Roles.Admin && <DashboardStatistics allClients={allClients} allDisputeAccounts={allDisputeAccounts} />}
       <div className="flex__between mt-8">
           <div className="">
               <p className="font-bold text-[1.4rem]">Clients</p>
           </div>
+          {/* <Button label="Success" className="bg-blue-500 p-3" /> */}
 
           <button className="btnXs" onClick={() => setShowAddFormModal(true)}>Add New Client</button>
       </div>
@@ -162,6 +198,17 @@ const Dashboard = () => {
         handleBtnClick={goToClientDetails}
       /> */}
 
+        {/* <div className="">
+             <DataTable className=""  showGridlines  stripedRows  style={{}}  value={allManagers} tableStyle={{ minWidth: '30rem'}}>
+                <Column bodyStyle={{}} field="id" header="Code" style={{padding: "10px", width: "25%" }}  headerStyle={{fontWeight: "700", fontSize: "1.1rem"}}     ></Column>
+                <Column field="firstName" header="Name" style={{padding: "5px", width: "25%" }}  headerStyle={{fontWeight: "700", fontSize: "1.1rem"}}></Column>
+                <Column field="lastName" header="Category" style={{padding: "5px", width: "25%" }} headerStyle={{fontWeight: "700", fontSize: "1.1rem"}} ></Column>
+                <Column field="processing" header="Quantity" style={{padding: "5px", width: "25%" }} headerStyle={{fontWeight: "700", fontSize: "1.1rem"}} ></Column>
+            </DataTable> 
+        </div> */}
+
+        
+
       <NewCustomTable
         titles={["Name", "Status", "Refresh Date", "Action"]}
         data={mappedClientsData}
@@ -170,38 +217,44 @@ const Dashboard = () => {
         handleBtnClick={(id: number) => goToClientDetails(id)}
       />
 
-      <div className="flex__between mt-8">
-          <div className="">
-              <p className="font-bold text-[1.4rem]">Managers</p>
-          </div>
+    {adminAuthData && role === Roles.Admin &&
 
-          <button className="btnSm" onClick={() => setShowAddAdminForm(true)}>Add New Manager</button>
-      </div>
-      <p>View all of manager information</p>
+      <>
+        <div className="flex__between mt-8">
+            <div className="">
+                <p className="font-bold text-[1.4rem]">Managers</p>
+            </div>
 
-      {showAddAdminForm && <CustomModal closeModal={setShowAddAdminForm}> <AddManagerForm fetchAllManagers={fetchAllManagers} /> </CustomModal>}
+            <button className="btnSm" onClick={() => setShowAddAdminForm(true)}>Add New Manager</button>
+        </div>
+
+        <p>View all of manager information</p>
+
+        {showAddAdminForm && <CustomModal closeModal={setShowAddAdminForm}> <AddManagerForm fetchAllManagers={fetchAllManagers} /> </CustomModal>}
 
 
-      {/* <CustomTable
-        firstTitle="Name" 
-        secondTitle="Status" 
-        thirdTitle="Date" 
-        fourthTitle="Action"
-        firstBody="Sariah Howell"
-        secondBody="Suspended"
-        thirdBody="31/05/2022"
-        fourthBody="Details"
-        isButton={true}
-        handleBtnClick={goToAdminDetails}
-      /> */}
+        {/* <CustomTable
+          firstTitle="Name" 
+          secondTitle="Status" 
+          thirdTitle="Date" 
+          fourthTitle="Action"
+          firstBody="Sariah Howell"
+          secondBody="Suspended"
+          thirdBody="31/05/2022"
+          fourthBody="Details"
+          isButton={true}
+          handleBtnClick={goToAdminDetails}
+        /> */}
 
-      <NewCustomTable
-        titles={["Name", "Status", "Refresh Date", "Action"]}
-        data={mappedManagersData}
-        isButton={true}
-        totalLength={allManagers?.length}
-        handleBtnClick={goToAdminDetails}
-      />
+          <NewCustomTable
+            titles={["Name", "Status", "Refresh Date", "Action"]}
+            data={mappedManagersData}
+            isButton={true}
+            totalLength={allManagers?.length}
+            handleBtnClick={goToAdminDetails}
+          />
+        </>
+      }
 
     </section>
   )

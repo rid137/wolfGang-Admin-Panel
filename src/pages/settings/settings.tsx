@@ -14,7 +14,7 @@ const Settings = () => {
             
             <div className="bg-greyBg p-7">
                 <div className="flex justify-end mb-10">
-                    <button className="bg-primary text-white px-4 py-2 rounded-md"><Link to="/settings/edit_profile">Edit Profile</Link></button>
+                    <button className="bg-primary text-white px-4 py-2 rounded-md"><Link to="/dashboard/settings/edit_profile">Edit Profile</Link></button>
                 </div>
 
                 <div className="flex flex-col justify-center items-center gap-2">
@@ -45,19 +45,19 @@ const Settings = () => {
                 </div>
 
                 <div className="bg-white p-4 mt-6 rounded-md">
-                        <Link to="/settings/security" className="flex gap-4 items-center text-md cursor-pointer">
+                        <Link to="/dashboard/settings/security" className="flex gap-4 items-center text-md cursor-pointer">
                             <MdOutlineSecurity />
                             <p>Security</p>
                         </Link>     
                 </div>
 
                 <div className="bg-white p-4 mt-6 rounded-md text-md">
-                        <Link to="/settings/support" className="flex gap-4 items-center cursor-pointer">
+                        <Link to="/dashboard/settings/support" className="flex gap-4 items-center cursor-pointer">
                             <BsPersonLinesFill />
                             <p>Help &amp; Support</p>
                         </Link>
                         
-                        <Link to="/settings/policy" className="flex gap-4 items-center mt-4 cursor-pointer">
+                        <Link to="/dashboard/settings/policy" className="flex gap-4 items-center mt-4 cursor-pointer">
                             <MdOutlinePrivacyTip />
                             <p>Privacy policy</p>
                         </Link>

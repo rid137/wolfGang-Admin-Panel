@@ -1,59 +1,37 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { DateTime } from "luxon";
 import inquiryLine from "../../../assets/inquiryLine.png";
 import PaginationBtn from "../../common/paginationBtn";
-import { BASE_URL } from "../../../libs";
 // import { UserAuth } from "../../../hooks/userAuthContext";
 import { NewCustomTableSkeleton } from "../../common/newCustomTable";
+// import { ManagerProfileType } from "../../../types/managerObj";
 
 
 interface DisputesProps {
     id: string;
     accessToken: string
+    clientDisputeAccounts?: any
+    clientInquiries?: any
 }
 
 
-const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
-    const [selectedMonth, setSelectedMonth] = useState('1');
-    const [selectedYear, setSelectedYear] = useState('2024');
+const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiries}): any => {
+    const [selectedMonthForDispute, setSelectedMonthForDispute] = useState('2');
+    const [selectedYearForDispute, setSelectedYearForDispute] = useState('2024');
+    const [selectedMonthForInquiry, setSelectedMonthForInquiry] = useState('2');
+    const [selectedYearForInquiry, setSelectedYearForInquiry] = useState('2024');
     const [months, setMonths] = useState<any>([]);
     const [years, setYears] = useState<any>([]);
 
 
     // const {userAuthData} = UserAuth()
+    // console.log("clinetDeeee", clientInquiries)
     
-    const [allAccounts, setAllAccounts] = useState<any>()
 
-    const fetchDisputeAccounts = async () => {
-        try {
-          const response = await axios.get(
-            `${BASE_URL}/account/findUnattendedAccounts/${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          const allAccountsData = response.data;
+    
 
-          setAllAccounts(allAccountsData);
-      
-          return allAccountsData;
-        } catch (error) {
-          console.error('Error fetching all clients:', error);
-        }
-    };
-
-    useEffect(() => {
-        const fetchAllDisputeAccountsInfo = async () => {
-          const allDisputeAccountsInfo = await fetchDisputeAccounts();
-          console.log("allDisputeAccountsInfo", allDisputeAccountsInfo);
-        };
-        
-        accessToken && fetchAllDisputeAccountsInfo();
-    }, [accessToken]);
-
+    
+    // WORK ON TYPE LATER
     useEffect(() => {
         const currentYear = new Date().getFullYear();
     
@@ -69,18 +47,35 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
     
         setMonths(monthOptions);
         setYears(yearOptions);
-      }, []);
+    }, []);
 
-    const filterByMonthAndYear = (allAccounts?: any[], targetMonth?: string , targetYear?: string) => {
-        return allAccounts?.filter((item) => {
+    // WORK ON TYPE LATER
+    const filterByMonthAndYear = (arrayToFilter?: any[], targetMonth?: string , targetYear?: string) => {
+        return arrayToFilter?.filter((item) => {
           const dateObject = DateTime.fromISO(item.date);
           const itemMonth = dateObject.month.toString();
           const itemYear = dateObject.year.toString();
       
-          return itemMonth === targetMonth && itemYear === targetYear;        });
+          return itemMonth === targetMonth && itemYear === targetYear;        
+        
+        });
     };
-    const filteredArray = filterByMonthAndYear(allAccounts, selectedMonth, selectedYear);
-    // console.log("filteredArray", filteredArray);
+    const filteredDisputeAccounts = filterByMonthAndYear(clientDisputeAccounts, selectedMonthForDispute, selectedYearForDispute);
+    const filteredInquiries = filterByMonthAndYear(clientInquiries, selectedMonthForInquiry, selectedYearForInquiry);
+
+    const getMonthName = (month: number): string => {
+        if (month < 1 || month > 12) {
+          return 'Invalid month';
+        }
+      
+        const date = new Date(2000, month - 1, 1);
+        const monthName = new Intl.DateTimeFormat('en-US', { month: 'long' }).format(date);
+      
+        return monthName;
+    };
+    const monthNameForDispute = getMonthName(Number(selectedMonthForDispute));
+    const monthNameForInquiry = getMonthName(Number(selectedMonthForInquiry));
+
       
 
   return (
@@ -108,8 +103,8 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
                 <select
                     className="bg-white py-3 px-2 flex__center gap-1 w-24 "
                     id="month"
-                    value={selectedMonth}
-                    onChange={(e) => setSelectedMonth(e.target.value)}
+                    value={selectedMonthForDispute}
+                    onChange={(e) => setSelectedMonthForDispute(e.target.value)}
                 >
                     <option value="">Select Month</option>
                     {months.map((month: any) => (
@@ -122,8 +117,8 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
                 <select
                     className="bg-white py-3 px-2 flex__center gap-1 w-24 "
                     id="year"
-                    value={selectedYear}
-                    onChange={(e) => setSelectedYear(e.target.value)}
+                    value={selectedYearForDispute}
+                    onChange={(e) => setSelectedYearForDispute(e.target.value)}
                 >
                     <option value="">Select Year</option>
                     {years.map((year: any) => (
@@ -135,7 +130,7 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
 
             </div>
 
-            <h4 className="font-bold text-[1.4rem]">Disputes Account By Month (2022)</h4>
+            <h4 className="font-bold text-[1.4rem]">Disputes Account By {monthNameForDispute} ({selectedYearForDispute})</h4>
             <p>Listed below are the account we identified  to be challenged in each  month</p>
         </div>
 
@@ -149,13 +144,13 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
 
 
                 {
-                allAccounts?.length > 0 ?
+                clientDisputeAccounts && clientDisputeAccounts?.length >= 0 ?
                 <>
                     {
-                        filteredArray && filteredArray?.length > 0 ? 
+                        filteredDisputeAccounts && filteredDisputeAccounts?.length > 0 ? 
                         <>
                             {
-                                filteredArray?.slice(0, 10).map((item: any) => (
+                                filteredDisputeAccounts?.slice(0, 10).map((item: any) => (
                                     <div key={item?.id} className="bg-white mx-4 rounded-lg" >
                                         <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-3 text-[.7rem] lg:text-[.9rem]">
                                             <p>{item?.accountName}</p>
@@ -170,7 +165,7 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
                         </>
                         :
                         <>
-                            <p>No Dispute Account Available </p>
+                            <p className="mb-[5rem] ml-[1rem]">No Dispute Account Available </p>
                         </>
                     }
                 </>
@@ -196,16 +191,49 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
                 } */}
 
                 <div className="flex justify-center sm:justify-end mx-4">
-                    <p>Latest actions (Showing 01 to 10 of {allAccounts?.length})</p>
+                    <p>Latest actions (Showing 01 to 10 of {clientDisputeAccounts?.length})</p>
                 </div>
 
                 <PaginationBtn />
-                <div className="w-full mx-auto flex items-center justify-center">
+                <div className="w-full mx-auto my-[3rem] flex items-center justify-center">
                     <img src={inquiryLine} className="w-[70%]" alt="" />
                 </div>
 
+
+                <div className="flex items-center justify-center gap-3 mx-auto my-3">
+                <select
+                    className="bg-white py-3 px-2 flex__center gap-1 w-24 "
+                    id="month"
+                    value={selectedMonthForInquiry}
+                    onChange={(e) => setSelectedMonthForInquiry(e.target.value)}
+                >
+                    <option value="">Select Month</option>
+                    {months.map((month: any) => (
+                    <option key={month.value} value={month.value}>
+                        {month.label}
+                    </option>
+                    ))}
+                </select>
+
+                <select
+                    className="bg-white py-3 px-2 flex__center gap-1 w-24 "
+                    id="year"
+                    value={selectedYearForInquiry}
+                    onChange={(e) => setSelectedYearForInquiry(e.target.value)}
+                >
+                    <option value="">Select Year</option>
+                    {years.map((year: any) => (
+                    <option key={year.value} value={year.value}>
+                        {year.label}
+                    </option>
+                    ))}
+                </select>
+
+            </div>
+
+
                 <div className="text-center mb-8 mt-4">
-                    <h4 className="font-bold text-[1.4rem]">Inquiries Disputed By Month (2022)</h4>
+                    <h4 className="font-bold text-[1.4rem]">Inquiries Disputed By {monthNameForInquiry} ({selectedYearForInquiry})</h4>
 
                     <p className="mx-4 my-2">Listed below are the account we identified  to be challenged in each  month</p>
                 </div>
@@ -216,7 +244,39 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
                     <p>Bureau</p>
                 </div>
 
-                {Array(10)
+                {
+                clientInquiries && clientInquiries?.length >= 0 ?
+                <>
+                    {
+                        filteredInquiries && filteredInquiries?.length > 0 ? 
+                        <>
+                            {
+                                filteredInquiries?.slice(0, 10).map((item: any, index: number) => (
+                                    <div key={index} className="bg-white mx-4 rounded-lg" >
+                                    <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-3 text-[.7rem] lg:text-[.9rem]">
+                                        <p>{item?.name}</p>
+                                        <p>{item?.date}</p>
+                                        <p>{item?.bureau}</p>
+                                    </div>
+
+                                </div>
+                                ))
+                            }
+                        </>
+                        :
+                        <>
+                            <p className="mb-[5rem] ml-[1rem]">No Inquiries Available </p>
+                        </>
+                    }
+                </>
+                :
+                <>
+                    <NewCustomTableSkeleton />
+                </>
+            }
+
+
+                {/* {Array(10)
                         .fill(10)
                         .map((_,) => (
                     <div className="bg-white mx-4 rounded-lg" >
@@ -228,10 +288,10 @@ const Disputes: React.FC<DisputesProps> = ({id, accessToken}): any => {
 
                     </div>
                     ))
-                }
+                } */}
 
                 <div className="flex justify-end mx-4">
-                    <p>Latest actions (Showing 01 to 09 of 259)</p>
+                    <p>Latest actions (Showing 01 to 10 of {clientInquiries?.length})</p>
                 </div>
 
                 <PaginationBtn />

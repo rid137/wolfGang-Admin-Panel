@@ -39,11 +39,19 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
     }
 
 
+    // const handleCheckboxChange = (name: string) => {
+    //     setCheckboxes(prevCheckboxes =>
+    //         prevCheckboxes.map(checkbox =>
+    //         checkbox.name === name ? { ...checkbox, checked: true } : { ...checkbox, checked: false }
+    //         )
+    //     );
+    // };
+
     const handleCheckboxChange = (name: string) => {
         setCheckboxes(prevCheckboxes =>
-            prevCheckboxes.map(checkbox =>
-            checkbox.name === name ? { ...checkbox, checked: true } : { ...checkbox, checked: false }
-            )
+          prevCheckboxes.map(checkbox =>
+            checkbox.name === name ? { ...checkbox, checked: !checkbox.checked } : checkbox
+          )
         );
     };
 
@@ -86,7 +94,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
 
     
         if (!selectedCheckbox?.name) {
-          console.log('Selected checkbox:', selectedCheckbox?.name);
+        //   console.log('Selected checkbox:', selectedCheckbox?.name);
           toast.error("Select a Bureau")
           return
 
@@ -100,7 +108,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
         };
     
 
-        console.log("FormData contents:", requestData);
+        // console.log("FormData contents:", requestData);
        
         const toastId = toast.loading("Adding Inquiry");
 
@@ -112,7 +120,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
                 },
             });
         
-            console.log("response", response.data);
+            // console.log("response", response.data);
             
             if (response.status === 200) {
                 toast.success("Scores added successfully", { id: toastId });
@@ -225,6 +233,28 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
             </div>
 
             {
+                    previousInquiries ? (
+                        previousInquiries.length > 0 ? (
+                            previousInquiries.slice(-10).map((item: any, index: number) => (
+                                <div key={index} className="bg-white mx-2 sm:mx-4 rounded-lg" >
+                                    <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-2 text-[.7rem] lg:text-[.9rem]">
+                                        <p>{item?.name}</p>
+                                        <p>{item?.date}</p>
+                                        <p>{item.bureau}</p>
+                                        <button className='bg-primary text-white p-1 sm:py-2 sm:px-3 rounded-xl text-[.7rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className="ml-5 mt-4">No Inquiries Available </p>
+                        )
+                    ) : (
+                        <NewCustomTableSkeleton />
+                    )
+                }
+
+
+            {/* {
                 previousInquiries?.length > 0 ?
                 <>
                     {
@@ -245,7 +275,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
                 <>
                     <NewCustomTableSkeleton />
                 </>
-            }
+            } */}
 
             {/* {Array(3)
                     .fill(3)

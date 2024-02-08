@@ -5,54 +5,78 @@ import { BASE_URL } from "../../libs";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 import { DateTime } from "luxon";
 import NewCustomTable from "../../components/common/newCustomTable";
+import { ManagerProfileType } from "../../types/managerObj";
+import { Roles } from "../dashboard/dashboard";
 
 const LetterCreation = () => {
-    const [allClients, setAllClients] = useState([]);
+  const [clientsForLetter, setClientsForLetter] = useState<ManagerProfileType[]>([]);
 
-    const { adminAuthData } = AdminAuth();
+  const { adminAuthData } = AdminAuth();
   const accessToken = adminAuthData?.token;
+  const id = adminAuthData?.userId;
+  const role = adminAuthData?.role;
 
-    const navigate = useNavigate()
+  const navigate = useNavigate();
 
-    const fetchAllClients = async () => {
-        try {
-          const response = await axios.get(
-            `${BASE_URL}/admin/getAllClients`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-          const clientsData = response.data;
-    
-          setAllClients(clientsData);
-      
-          return clientsData;
-        } catch (error) {
-          console.error('Error fetching all clients:', error);
+  const fetchClientsForLetterManager = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/admin/getClientForLetter/${id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
         }
-    };
+      );
+      const clientsData = response.data;
 
-    useEffect(() => {
-        const fetchAllClientsInfo = async () => {
-          await fetchAllClients();
-        };
-        
-        accessToken && fetchAllClientsInfo();
-      }, [accessToken]);
-        
-    const mappedClientsData = allClients.slice(0, 10).map((item: any) => ({
-      id: item.id,
-      firstBody: `${item.firstName}   ${item.lastName}`,
-      secondBody: item.status ? item.status : 'active',
-      thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
-      fourthBody: "Details",
-    }));
-
-    const goToDisputeAccounttDetails = (id: number) => {
-        navigate(`/dashboard/letter_creation/letter_creation_details/${id}`)
+      setClientsForLetter(clientsData);
+  
+      return clientsData;
+    } catch (error) {
+      console.error('Error fetching all clients:', error);
     }
+  };
+
+  const fetchClientsForLetterAdmin = async () => {
+    try {
+      const response = await axios.get(
+        `${BASE_URL}/admin/getAllClientsForLetter`,
+        {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        }
+      );
+      const clientsData = response.data;
+
+      setClientsForLetter(clientsData);
+  
+      return clientsData;
+    } catch (error) {
+      console.error('Error fetching all clients:', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchClientsForLetterInfo = async () => {
+      role === Roles.Admin ? await fetchClientsForLetterAdmin() : await fetchClientsForLetterManager();
+    };
+    
+    accessToken && fetchClientsForLetterInfo();
+  }, [accessToken]);
+      
+  const mappedClientsData = clientsForLetter.slice(0).map((item: any) => ({
+    id: item.id,
+    firstBody: `${item.firstName}   ${item.lastName}`,
+    secondBody: item.status ? item.status : 'active',
+    thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
+    fourthBody: "Details",
+  }));
+
+  const goToDisputeAccounttDetails = (id: number) => {
+      navigate(`/dashboard/letter_creation/letter_creation_details/${id}`)
+  }
     
 
     return(
@@ -72,11 +96,13 @@ const LetterCreation = () => {
                 handleBtnClick={goToDisputeAccounttDetails}
             /> */}
 
+            
+
             <NewCustomTable
                 titles={["Name", "Status", "Refresh Date", "Action"]}
                 data={mappedClientsData}
                 isButton={true}
-                totalLength={allClients?.length}
+                totalLength={clientsForLetter?.length}
                 handleBtnClick={(id: number) => goToDisputeAccounttDetails(id)}
             />
 
