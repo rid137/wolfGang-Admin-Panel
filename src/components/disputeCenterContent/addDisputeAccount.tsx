@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -50,7 +49,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
     const [allDisputeAccounts, setAllDisputeAccounts] = useState<any>()
     const [checkboxes, setCheckboxes] = useState<CheckboxData[]>(initialCheckboxes);
 
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     // const handleCheckboxChange = (name: string) => {
     //     setCheckboxes(prevCheckboxes =>
@@ -228,9 +227,9 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
     }, [accessToken]);
 
 
-    const goToClientDetails = (id: string) => {
-        navigate(`/dashboard/client_details/${id}`)
-    }
+    // const goToClientDetails = (id: string) => {
+    //     navigate(`/dashboard/client_details/${id}`)
+    // }
 
   return (
     <>

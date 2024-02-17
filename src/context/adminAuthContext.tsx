@@ -1,7 +1,6 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
 // import { ManagerProfileType } from '../types/managerObj';
 import { UserAuthDataType } from '../types/userAuthTypes';
-import { Navigate } from 'react-router-dom';
 
 interface AdminAuthContextType {
   adminAuthData: UserAuthDataType | null

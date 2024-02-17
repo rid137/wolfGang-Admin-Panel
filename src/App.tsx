@@ -25,7 +25,7 @@ import { Toaster } from 'react-hot-toast';
 import Login from './components/authentication/login';
 import AuthLayout from './components/authentication/authLayout';
 import { AdminAuthContextProvider } from './context/adminAuthContext';
-import ProtectedPage from './components/authentication/protectedPage';
+// import ProtectedPage from './components/authentication/protectedPage';
 import { QueryClient, QueryClientProvider } from  "@tanstack/react-query";
 import Register from './components/authentication/register';
 // import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
