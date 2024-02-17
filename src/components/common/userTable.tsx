@@ -88,11 +88,11 @@ export function UserTable<TData, TValue>({columns, data}: ReactTableProps<TData,
                 </Table>
             </div> 
 
-            <div className="mt-4 flex items-center justify-center gap-2 md:gap-4 text-white text-[.6rem] md:text-[.8rem]">
-                <button onClick={() => table.setPageIndex(0)} className="bg-primary text-white py-1 px-1 xs:py-2 xs:px-3 rounded-xl text-[.8rem]">First Page </button>
-                <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="bg-primary text-white py-1 px-1 xs:py-2 xs:px-3 rounded-xl text-[.8rem] disabled:bg-blue-400">Previous Page</button>
-                <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="bg-primary text-white py-1 px-1 xs:py-2 xs:px-3 rounded-xl text-[.8rem] disabled:bg-blue-400">Next Page</button>
-                <div onClick={() => table.setPageIndex(table.getPageCount() - 1)} className="bg-primary text-white py-1 px-1 xs:py-2 xs:px-3 rounded-xl text-[.8rem]">Last Page</div>
+            <div className="mt-4 flex items-center justify-center gap-2 md:gap-4 text-white text-[.5rem] md:text-[.8rem]">
+                <button onClick={() => table.setPageIndex(0)} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl">First Page </button>
+                <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl disabled:bg-blue-400">Previous Page</button>
+                <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl disabled:bg-blue-400">Next Page</button>
+                <div onClick={() => table.setPageIndex(table.getPageCount() - 1)} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl">Last Page</div>
                 
             </div>
             
