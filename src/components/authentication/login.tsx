@@ -84,7 +84,7 @@ const Login = () => {
                     'Content-Type': 'application/json',
                 }
             })
-            console.log("response", response)
+            // console.log("response", response)
             // setAdminAuthData(response.data)
             // toast.success("Log In Successful", { autoClose: 3000 } as ToastOptions);
                         
