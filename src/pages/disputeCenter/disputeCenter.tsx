@@ -1,17 +1,21 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { DateTime } from "luxon";
+import { useMemo, useState } from "react";
+// import { useNavigate } from "react-router-dom";
+// import { DateTime } from "luxon";
 // import { UserAuth } from "../../hooks/userAuthContext";
 import axios from "axios";
 import { BASE_URL } from "../../libs";
-import NewCustomTable from "../../components/common/newCustomTable";
+// import NewCustomTable from "../../components/common/newCustomTable";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 import { Roles } from "../dashboard/dashboard";
+import { useQuery } from "@tanstack/react-query";
+// import { DisputeAccountType } from "../../types/clientDetailsObj";
+import { UserTable } from "../../components/common/userTable";
+import { disputeCenterTableColumns } from "../../components/common/reactTableColumn";
 
 
 const DisputeCenter = () => {
-  const [disputeAccounts, setDisputeAccounts] = useState([]);
-  const navigate = useNavigate();
+  const [ , setDisputeAccounts] = useState([]);
+  // const navigate = useNavigate();
 
   const { adminAuthData  } = AdminAuth();
   const accessToken = adminAuthData?.token;
@@ -62,27 +66,44 @@ const DisputeCenter = () => {
       }
   };
 
-
-  useEffect(() => {
-    const fetchDisputeAccountsForManagerInfo = async () => {
-      role === Roles.Admin ? await fetchDisputeAccountsForAdmin() : await fetchDisputeAccountsForManager();
-    };
-    
-    accessToken && fetchDisputeAccountsForManagerInfo();
-  }, [accessToken]);
-
-
-  const mappedClientsData = disputeAccounts.slice(0, 10).map((item: any) => ({
-    id: item.id,
-    firstBody: `${item.firstName}   ${item.lastName}`,
-    secondBody: item.status ? item.status : 'active',
-    thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
-    fourthBody: "Details"
-  }));
-
-  const goToDisputeAccounttDetails = (id: number) => {
-    navigate(`/dashboard/dispute_center/dispute_account_details/${id}`);
+  const fetchDisputeAccountsForManagerInfo = async () => {
+    return role === Roles.Admin ? await fetchDisputeAccountsForAdmin() : await fetchDisputeAccountsForManager();
   };
+
+  // const [clientsForManager, managerDetails ] = useQueries({
+  //   queries: [
+  //     { queryKey: ['clientsForAManager'], queryFn: fetchClientsForManager, enabled: !!accessToken },
+  //     { queryKey: ['singleClient'], queryFn: fetchSingleClient, enabled: !!accessToken },
+  //   ]
+  // })
+
+    const { isLoading,  data: clientForDispute } = useQuery({
+      queryKey: ['disputeAccount'],
+      queryFn: fetchDisputeAccountsForManagerInfo,
+      enabled: !!accessToken
+    })
+
+    if(isLoading) {
+      return <p>Loading...</p>
+    }
+  // useEffect(() => {
+    
+  //   accessToken && fetchDisputeAccountsForManagerInfo();
+  // }, [accessToken]);
+
+  const memoizedclientForDisputeData = useMemo(() => clientForDispute, [clientForDispute])
+
+  // const mappedClientsData = (data ?? [])?.slice(0, 10).map((item: any) => ({
+  //   id: item.id,
+  //   firstBody: `${item.firstName}   ${item.lastName}`,
+  //   secondBody: item.status ? item.status : 'active',
+  //   thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
+  //   fourthBody: "Details"
+  // }));
+
+  // const goToDisputeAccounttDetails = (id: number) => {
+  //   navigate(`/dashboard/dispute_center/dispute_account_details/${id}`);
+  // };
 
   return(
     <section className="">
@@ -103,13 +124,15 @@ const DisputeCenter = () => {
         handleBtnClick={goToDisputeAccounttDetails}
       /> */}
 
-      <NewCustomTable
+      <UserTable data={memoizedclientForDisputeData ?? []} columns={disputeCenterTableColumns} />
+
+      {/* <NewCustomTable
         titles={["Name", "Status", "Refresh Date", "Action"]}
-        data={mappedClientsData}
+        data={mappedClientsData && mappedClientsData}
         isButton={true}
         totalLength={disputeAccounts?.length}
         handleBtnClick={(id: number) => goToDisputeAccounttDetails(id)}
-      />
+      /> */}
 
     </section>
   )

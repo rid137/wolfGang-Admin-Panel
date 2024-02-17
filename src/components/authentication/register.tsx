@@ -11,14 +11,16 @@ import wolfgangLogo from "../../assets/wolfgangLogo.png";
 
 
 const loginSchema = z.object({
+    firstName: z.string().min(2, { message: "Must be 2 or more characters long" }),
+    lastName: z.string().min(2, { message: "Must be 2 or more characters long" }),
+    phoneNumber: z.string().min(11, { message: "Must be 11 or more characters long" }),
     email: z.string().email(),
-    password: z.string().min(5, { message: "Must be 5 or more characters long" }),
 });
 
 type FormFields = z.infer<typeof loginSchema>;
 
 
-const Login = () => {
+const Register = () => {
     // const [userData, setUserData] = useState<any>()
     const navigate = useNavigate();
 
@@ -61,54 +63,57 @@ const Login = () => {
 
 
     const onSubmit: SubmitHandler<FormFields> = async (data) => {
-        
-        // console.log("data", data)
+        // console.log(data);
+
         const formData = new FormData();
         
-        formData.append("email", data.email);
-        formData.append("password", data.password);
+        formData.append('email', data.email as string);
+        formData.append('firstName', data.firstName as string);
+        formData.append('lastName', data.lastName as string);
+        // formData.append('password', data.password);
+        formData.append('phone', data.phoneNumber);
 
-        // console.log("formData", formData)
-        // console.log("FormData contents:");
-        // for (let pair of formData.entries()) {
-        //     console.log(pair[0] + ": " + pair[1]);
-        // }
+        const toastId = toast.loading("Creating Manager Account");
 
 
-        try {
-            // toast.loading('Logging In! Please Wait')
-            const toastId = toast.loading('Logging You In! Please Wait');
-
-             const response = await axios.post(`${BASE_URL}/auth/adminSignIn`, formData, {
+        try {        
+            const response = await axios.post(`${BASE_URL}/auth/addManager`, formData, {
                 headers: {
                     'Content-Type': 'application/json',
-                }
-            })
-            console.log("response", response)
-            // setAdminAuthData(response.data)
-            // toast.success("Log In Successful", { autoClose: 3000 } as ToastOptions);
-                        
-            // const json = await response.data()
-            
-            // if (response.statusText === "OK" ) {
-                toast.success("Log In Successful", { id: toastId });
+                },
+            });
+        
+            console.log("response", response);
+        
+            if (response.status === 200) {
+                // console.log("json response", response.data);
+                // setManagerObj(response.data);
+
+                toast.success("Manager Account Created successfully", { id: toastId });
                 setAdminAuthData(response.data)
+
                 navigate("/dashboard");
-            // } else {
-            //     toast.remove()
-            // }
+
+            } else {
+                toast.remove();
+                toast.error(response.data.message);
+            }
         } catch (error: any) {
-            toast.remove()
-            if (error.message === 'Failed to fetch') toast.error('Network Error. Try again')
-            else toast.error('Error encountered. Try again')
-            // console.log(error.message)
+            toast.remove();
+            if (error.message === 'Failed to fetch') {
+                toast.error('Network Error. Try again');
+            } else {
+                toast.error('Error encountered. Try again');
+            }
+            // console.log(error.message);
         }
+
         // toast.remove();
 
+        // navigate("/login");
         
 
         reset()
-        // Add your form submission logic here
     };
 
     if (adminAuthData) {
@@ -119,26 +124,47 @@ const Login = () => {
     return(
         <div className="bg-[#F5F5F5] py-5 px-4 md:px-8 w-[rem] h-[vh] mx-3 my-3 md:my-0 md:mx-0">
             <div className="flex__center bg-primary mb-3 py-2">
-                <img src={wolfgangLogo} className="" alt="" />
+                <img src={wolfgangLogo} className="" alt="logo" />
             </div>
-            <h3 className="text-primary text-[1.4rem] md:text-[1.7rem] font-bold text-center ">Log In</h3>
-            <p className="text-center mb-6">Don’t have an account? <Link to="/register" className="text-primary">Create an account</Link></p>
+            <h3 className="text-primary text-[1.4rem] md:text-[1.7rem] font-bold text-center ">Register</h3>
+            <p className="text-center mb-6">Already have an account? <Link to="/" className="text-primary">Login here</Link></p>
 
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div className="flex items-cente justify-center flex-col gap-4 md:mx-4 lg:mx-0">
                     <div className="flex flex-col w-full">
-                        <label className="font-bold">Email</label>
+                        <label className="font-bold">First Name <span>*</span></label>
+                        {/* <CustomInput placeholder="Enter first name" /> */}
+                        <input {...register('firstName')} type="text" className="inputCls focus:outline-primary"  />
+                    </div>
+                        {errors.firstName && (
+                            <p className="text-red-600">{errors.firstName.message}</p>
+                        )}
+                    <div className="flex flex-col w-full">
+                        <label className="font-bold">Last Name <span>*</span></label>
+                        {/* <CustomInput placeholder="Enter last name" /> */}
+                        <input {...register('lastName')} type="text" className="inputCls focus:outline-primary"  />
+
+                        
+                    </div>
+                    {errors.lastName && (
+                        <p className="text-red-600">{errors.lastName.message}</p>
+                    )}
+                    <div className="flex flex-col w-full">
+                        <label className="font-bold">Email <span>*</span></label>
                         {/* <CustomInput placeholder="Enter password" /> */}
                         <input {...register('email')}  type="text"  className="inputCls focus:outline-primary" /> 
                     </div>
                     {errors.email && <p className="text-red-600">{errors.email.message}</p>}
 
                     <div className="flex flex-col w-full">
-                        <label className="font-bold">Password</label>
-                        {/* <CustomInput placeholder="Confirm Password" /> */}
-                        <input {...register('password')}  type="text"  className="inputCls focus:outline-primary" /> 
+                        <label className="font-bold">Phone Number <span>*</span></label>
+                        {/* <CustomInput placeholder="Enter phone number" /> */}
+                        <input {...register('phoneNumber')} type="text" className="inputCls focus:outline-primary"  />
+                
                     </div>
-                    {errors.password && <p className="text-red-600">{errors.password.message}</p>}
+                    {errors.phoneNumber && (
+                        <p className="text-red-600">{errors.phoneNumber.message}</p>
+                    )}
                 </div>
 
                 <p className="my-3"><span>*</span> This field is mandatory</p>
@@ -158,7 +184,7 @@ const Login = () => {
     )
 }
     
-export default Login;
+export default Register;
 
 
 

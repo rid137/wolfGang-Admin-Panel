@@ -9,18 +9,18 @@ import CustomLabelInput from "../../../utils/customLabelInput";
 import { BASE_URL } from "../../../libs";
 import { Piechart } from "../../../components/dashboardContent/clientDetailsContent/pie_chart";
 import { AdminAuth } from "../../../hooks/useAdminAuthContext";
-import { ManagerProfileType } from "../../../types/managerObj";
+import { ClientDetailsType, DisputeAccountType } from "../../../types/clientDetailsObj";
 import toast from "react-hot-toast";
 
 const ClientDetails = () => {
     const [showClientDetails, setShowClientDetails] = useState<boolean>(false);
-    const [singleClient, setSingleClient] = useState<ManagerProfileType>();
+    const [singleClient, setSingleClient] = useState<ClientDetailsType>();
     const [allScores, setAllScores] = useState<any>()
     const [isEditing, setIsEditing] = useState<boolean>(false);
     const [updatedClient, setUpdatedClient] = useState({ ...singleClient });
     const [showEditBtn, setShowEditBtn] = useState<boolean>(true)
 
-    const [clientDisputeAccounts, setClientDisputeAccounts] = useState<ManagerProfileType[]>([])
+    const [clientDisputeAccounts, setClientDisputeAccounts] = useState<DisputeAccountType[]>([])
     const [clientInquiries, setClientInquiries] = useState<any>()
 
 
@@ -125,8 +125,8 @@ const ClientDetails = () => {
         };
 
         const fetchAllScoresInfo = async () => {
-            await fetchAllScores();
-            // console.log("allScoresInfo", allScoresInfo);
+            const allScoresInfo = await fetchAllScores();
+            console.log("allScoresInfo", allScoresInfo);
         };
 
         const fetchClientDisputeAccountsInfo = async () => {
@@ -155,7 +155,7 @@ const ClientDetails = () => {
     const updateClientData = async () => {
         const toastId = toast.loading("Updating Profile Information");
 
-        const formData = new FormData()
+        const formData = new FormData();
 
         formData.append('email', updatedClient?.email as string);
         // formData.append('firstName', data.firstName as string);

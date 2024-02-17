@@ -1,20 +1,22 @@
-import PaginationBtn from '../common/paginationBtn';
-import trash from "../../assets/trash.svg";
+// import PaginationBtn from '../common/paginationBtn';
+// import trash from "../../assets/trash.svg";
 import axios from 'axios';
 import { BASE_URL } from '../../libs';
-import { useEffect } from 'react';
-import { DateTime } from 'luxon';
-import { NewCustomTableSkeleton } from '../common/newCustomTable';
-import toast from 'react-hot-toast';
+import { useEffect, useMemo } from 'react';
+// import { DateTime } from 'luxon';
+// import { NewCustomTableSkeleton } from '../common/newCustomTable';
+// import toast from 'react-hot-toast';
+import { UserTable } from '../common/userTable';
+import { ficoScoreTableColumns } from '../common/reactTableColumn';
 
-interface AddInquiryProps {
+interface FicoScoreTableProps {
   id: string;
   accessToken: string
   allScores: any
 }
 
 
-const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores}): any => {
+const FicoScoreTable: React.FC<FicoScoreTableProps> = ({id, accessToken, allScores}): any => {
   // const [allScores, setAllScores] = useState<any>()
 
   const fetchAllScores = async () => {
@@ -40,49 +42,53 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores})
 
   useEffect(() => {
     const fetchAllScoresInfo = async () => {
-      await fetchAllScores();
-      // console.log("allScoresInfo", allScoresInfo);
+      const allScoresInfo = await fetchAllScores();
+      console.log("allScoresInfo", allScoresInfo);
     };
     
     accessToken && fetchAllScoresInfo();
   }, [accessToken]);
 
 
-  const handleDelete = async (id: string | number) => {
-    if(window.confirm('Are you sure you want to delete the score?'))  {
-        toast.loading("Deleting FICO score")
+  // const handleFicoScoreDelete = async (id: string | number) => {
+  //   if(window.confirm('Are you sure you want to delete the score?'))  {
+  //       toast.loading("Deleting FICO score")
 
-      try {
-          const response = await axios.delete(
-            `${BASE_URL}/scores/delete/${id}?id=${id}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-                // 'Content-Type': 'application/json',
-              },
-            }
-          );
+  //     try {
+  //         const response = await axios.delete(
+  //           `${BASE_URL}/scores/delete/${id}?id=${id}`,
+  //           {
+  //             headers: {
+  //               Authorization: `Bearer ${accessToken}`,
+  //               // 'Content-Type': 'application/json',
+  //             },
+  //           }
+  //         );
 
-          if (response.status === 200) {
-            toast.success('FICO score deleted successfully')
-            await fetchAllScores()
-          }
+  //         if (response.status === 200) {
+  //           toast.success('FICO score deleted successfully')
+  //           await fetchAllScores()
+  //         }
 
-      } catch (error) {
-        toast.error('FICO score deleted successfully')
-        console.error('Error fetching all clients:', error);
-      }
+  //     } catch (error) {
+  //       toast.error('FICO score deleted successfully')
+  //       console.error('Error fetching all clients:', error);
+  //     }
 
-      toast.remove()
-    }        
-  }
+  //     toast.remove()
+  //   }        
+  // }
+
+  const memoizedAllScoresData = useMemo(() => allScores, [allScores])
+
 
   return (
     <>
       <h4 className="font-bold text-[1.4rem] mt-10">FICO Scores</h4>
       <p>List of FICO scores </p>
 
-      <div className="bg-greyBg text-black text-center py-1 mt-5 rounded-md"> 
+      <UserTable data={memoizedAllScoresData ?? []} columns={ficoScoreTableColumns} />
+      {/* <div className="bg-greyBg text-black text-center py-1 mt-5 rounded-md"> 
               
         <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3 ml-1 md:ml-5 mr-5 lg:mr-10  lg:mx-16 text-[.5rem] lg:text-[.9rem] mt-4">
           <p className='text-[.4rem] lg:text-[.9rem]'>Experian FICO Score</p>
@@ -102,7 +108,7 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores})
                             <p className="md:pl-12">{item?.equifaxScore}</p>
                             <p className="md:pl-28">{item?.transunionScore}</p>
                             <p className="md:pl-8"> {DateTime.fromISO(item.createdAt).toLocaleString(DateTime.DATE_MED)}</p>
-                            <p className="md:pr-7" onClick={() => handleDelete(item?.id)}><img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" /></p>
+                            <p className="md:pr-7" onClick={() => handleFicoScoreDelete(item?.id)}><img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" /></p>
                           </div>
       
                         </div>  
@@ -113,7 +119,7 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores})
               ) : (
                   <NewCustomTableSkeleton />
               )
-          }
+          } */}
 
 
         {/* {
@@ -127,7 +133,7 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores})
                       <p className="md:pl-12">{item?.equifaxScore}</p>
                       <p className="md:pl-28">{item?.transunionScore}</p>
                       <p className="md:pl-8"> {DateTime.fromISO(item.createdAt).toLocaleString(DateTime.DATE_MED)}</p>
-                      <p className="md:pr-7" onClick={() => handleDelete(item?.id)}><img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" /></p>
+                      <p className="md:pr-7" onClick={() => handleFicoScoreDelete(item?.id)}><img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" /></p>
                     </div>
 
                   </div>  
@@ -160,12 +166,12 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores})
             <p>Latest actions (Showing 01 to 09 of 259)</p>
         </div> */}
 
-        <div className="flex justify-end mx-4">
+        <div className="mb-16">
             {/* <p>Latest actions (Showing 01 to {allScores?.length} of {allScores?.length})</p> */}
         </div>
 
-        <PaginationBtn />
-      </div>
+        {/* <PaginationBtn /> */}
+      {/* </div> */}
 
       
     </>
@@ -173,3 +179,32 @@ const FicoScoreTable: React.FC<AddInquiryProps> = ({id, accessToken, allScores})
 }
 
 export default FicoScoreTable;
+
+// export const handleFicoScoreDelete = async (id: string | number) => {
+//   if(window.confirm('Are you sure you want to delete the score?'))  {
+//       toast.loading("Deleting FICO score")
+
+//     try {
+//         const response = await axios.delete(
+//           `${BASE_URL}/scores/delete/${id}?id=${id}`,
+//           {
+//             headers: {
+//               Authorization: `Bearer ${accessToken}`,
+//               // 'Content-Type': 'application/json',
+//             },
+//           }
+//         );
+
+//         if (response.status === 200) {
+//           toast.success('FICO score deleted successfully')
+//           await fetchAllScores()
+//         }
+
+//     } catch (error) {
+//       toast.error('FICO score deleted successfully')
+//       console.error('Error fetching all clients:', error);
+//     }
+
+//     toast.remove()
+//   }        
+// }

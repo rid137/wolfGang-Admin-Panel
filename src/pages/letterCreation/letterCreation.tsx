@@ -1,15 +1,18 @@
 import { useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import { BASE_URL } from "../../libs";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 import { DateTime } from "luxon";
 import NewCustomTable from "../../components/common/newCustomTable";
-import { ManagerProfileType } from "../../types/managerObj";
+import { ClientDetailsType } from "../../types/clientDetailsObj";
 import { Roles } from "../dashboard/dashboard";
+import { useQuery } from "@tanstack/react-query";
+import { UserTable } from "../../components/common/userTable";
+import { letterCreationTableColumns } from "../../components/common/reactTableColumn";
 
 const LetterCreation = () => {
-  const [clientsForLetter, setClientsForLetter] = useState<ManagerProfileType[]>([]);
+  const [clientsForLetter, setClientsForLetter] = useState<ClientDetailsType[]>([]);
 
   const { adminAuthData } = AdminAuth();
   const accessToken = adminAuthData?.token;
@@ -57,22 +60,32 @@ const LetterCreation = () => {
       console.error('Error fetching all clients:', error);
     }
   };
+  const fetchClientsForLetterInfo = async () => {
+    return role === Roles.Admin ? await fetchClientsForLetterAdmin() : await fetchClientsForLetterManager();
+  };
 
-  useEffect(() => {
-    const fetchClientsForLetterInfo = async () => {
-      role === Roles.Admin ? await fetchClientsForLetterAdmin() : await fetchClientsForLetterManager();
-    };
+  // useEffect(() => {
     
-    accessToken && fetchClientsForLetterInfo();
-  }, [accessToken]);
+  //   accessToken && fetchClientsForLetterInfo();
+  // }, [accessToken]);
+
+
+  const { isLoading, isError, data: clientForLetter } = useQuery({
+    queryKey: ['clientForLetter'],
+    queryFn: fetchClientsForLetterInfo,
+    enabled: !!accessToken
+  })
+
+  const memoizedclientForLetterData = useMemo(() => clientForLetter, [clientForLetter])
+
       
-  const mappedClientsData = clientsForLetter.slice(0).map((item: any) => ({
-    id: item.id,
-    firstBody: `${item.firstName}   ${item.lastName}`,
-    secondBody: item.status ? item.status : 'active',
-    thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
-    fourthBody: "Details",
-  }));
+  // const mappedClientsData = clientsForLetter.slice(0).map((item: any) => ({
+  //   id: item.id,
+  //   firstBody: `${item.firstName}   ${item.lastName}`,
+  //   secondBody: item.status ? item.status : 'active',
+  //   thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
+  //   fourthBody: "Details",
+  // }));
 
   const goToDisputeAccounttDetails = (id: number) => {
       navigate(`/dashboard/letter_creation/letter_creation_details/${id}`)
@@ -96,15 +109,17 @@ const LetterCreation = () => {
                 handleBtnClick={goToDisputeAccounttDetails}
             /> */}
 
+            <UserTable data={memoizedclientForLetterData ?? []} columns={letterCreationTableColumns} />
+
             
 
-            <NewCustomTable
+            {/* <NewCustomTable
                 titles={["Name", "Status", "Refresh Date", "Action"]}
                 data={mappedClientsData}
                 isButton={true}
                 totalLength={clientsForLetter?.length}
                 handleBtnClick={(id: number) => goToDisputeAccounttDetails(id)}
-            />
+            /> */}
 
         </section>
     )

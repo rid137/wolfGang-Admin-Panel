@@ -65,10 +65,10 @@ const AddManagerForm: React.FC<AddManagerFormProps> = ({fetchAllManagers}) => {
                 },
             });
         
-            console.log("response", response.data);
+            // console.log("response", response.data);
         
             if (response.status === 200) {
-                console.log("json response", response.data);
+                // console.log("json response", response.data);
                 // setManagerObj(response.data);
                 toast.success("Manager Account Created successfully", { id: toastId });
                 await fetchAllManagers()
@@ -83,7 +83,7 @@ const AddManagerForm: React.FC<AddManagerFormProps> = ({fetchAllManagers}) => {
             } else {
                 toast.error('Error encountered. Try again');
             }
-            console.log(error.message);
+            // console.log(error.message);
         }
 
         // toast.remove();

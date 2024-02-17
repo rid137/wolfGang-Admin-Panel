@@ -1,10 +1,12 @@
-import PaginationBtn from '../common/paginationBtn';
-import trash from "../../assets/trash.svg";
-import { useEffect, useState } from 'react';
+// import PaginationBtn from '../common/paginationBtn';
+// import trash from "../../assets/trash.svg";
+import { useEffect, useMemo, useState } from 'react';
 import axios from 'axios';
 import { BASE_URL } from '../../libs';
-import { NewCustomTableSkeleton } from '../common/newCustomTable';
-import toast from 'react-hot-toast';
+// import { NewCustomTableSkeleton } from '../common/newCustomTable';
+// import toast from 'react-hot-toast';
+import { UserTable } from '../common/userTable';
+import { inquiryWithActionTableColumns } from '../common/reactTableColumn';
 
 
 interface AddInquiryProps {
@@ -47,35 +49,38 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
   }, [accessToken]);
 
 
-  const handleDelete = async (id: string | number) => {
-    if(window.confirm('Are you sure you want to delete this inquiry?'))  {
+  // const handleDelete = async (id: string | number) => {
+  //   if(window.confirm('Are you sure you want to delete this inquiry?'))  {
 
-        const toastId = toast.loading("Deleting inquiry");
+  //       const toastId = toast.loading("Deleting inquiry");
 
-        try {
-            const response = await axios.delete(
-              `${BASE_URL}/inquiry/delete/${id}`,
-              {
-                headers: {
-                  Authorization: `Bearer ${accessToken}`,
-                },
-              }
-            );
+  //       try {
+  //           const response = await axios.delete(
+  //             `${BASE_URL}/inquiry/delete/${id}`,
+  //             {
+  //               headers: {
+  //                 Authorization: `Bearer ${accessToken}`,
+  //               },
+  //             }
+  //           );
 
-            if (response.status === 200) {
-                toast.success('Inquiry deleted successfully', { id: toastId })
-                await fetchAllInquiries();
-            }
+  //           if (response.status === 200) {
+  //               toast.success('Inquiry deleted successfully', { id: toastId })
+  //               await fetchAllInquiries();
+  //           }
 
-        } catch (error) {
-          toast.remove()
-            toast.error('Something went wrong')
-            console.error('Error deleting account:', error);
-        }
+  //       } catch (error) {
+  //         toast.remove()
+  //           toast.error('Something went wrong')
+  //           console.error('Error deleting account:', error);
+  //       }
         
-      }        
-      // toast.remove()
-  }
+  //     }        
+  //     // toast.remove()
+  // }
+
+  const memoizedAllInquiriesData = useMemo(() => allInquiries, [allInquiries])
+
 
 
   return (
@@ -84,7 +89,8 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
       <p>Lists of inquiries</p>
 
 
-      <div className="bg-greyBg w-ful text-black py-6 m-w-[90%] w-full overflow-x-scrol  rounded-md"> 
+      <UserTable data={memoizedAllInquiriesData ?? []} columns={inquiryWithActionTableColumns} />
+      {/* <div className="bg-greyBg w-ful text-black py-6 m-w-[90%] w-full overflow-x-scrol  rounded-md"> 
             <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-5 lg:mx-10 text-[.7rem] lg:text-[.9rem]">
                 <p className="mr-">Name</p>
                 <p className="ml-">Date Of Inquiry</p>
@@ -95,13 +101,12 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
             {
                     allInquiries ? (
                         allInquiries.length > 0 ? (
-                            allInquiries.map((item: any, index: number) => (
+                            allInquiries.slice(0, 10).map((item: any, index: number) => (
                               <div key={index} className="bg-white mx-2 sm:mx-4 rounded-lg" >
                                 <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:px-6 px-2 text-[.7rem] lg:text-[.9rem]">
                                     <p>{item?.name}</p>
                                     <p>{item?.date}</p>
                                     <p>{item.bureau}</p>
-                                    {/* <button className='bg-primary text-white p-1 sm:py-2 sm:px-3 rounded-xl text-[.7rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button> */}
                                     <img src={trash} className='cursor-pointer w-3 h-3' alt="delete" onClick={() => handleDelete(item?.id)} />
                                 </div>
                             </div>
@@ -112,7 +117,7 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
                     ) : (
                         <NewCustomTableSkeleton />
                     )
-                }
+                } */}
 
             {/* {
               allInquiries?.length > 0 ?
@@ -136,12 +141,12 @@ const InquiryListTable: React.FC<AddInquiryProps> = ({id, accessToken}): any => 
                 <NewCustomTableSkeleton />
               </>
             } */}
-      </div>
-      <div className="flex justify-end mx-4">
+      {/* </div> */}
+      <div className="mb-16">
         {/* <p>Latest actions (Showing 01 to 09 of {allInquiries?.length})</p> */}
       </div>
 
-      <PaginationBtn />
+      {/* <PaginationBtn /> */}
 
 
       {/* <div className="bg-greyBg text-black text-center py-6 mt-5 rounded-md overflow-x-auto">

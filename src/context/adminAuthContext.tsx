@@ -1,6 +1,7 @@
 import { createContext, useEffect, useState, ReactNode } from 'react';
 // import { ManagerProfileType } from '../types/managerObj';
 import { UserAuthDataType } from '../types/userAuthTypes';
+import { Navigate } from 'react-router-dom';
 
 interface AdminAuthContextType {
   adminAuthData: UserAuthDataType | null
@@ -42,7 +43,7 @@ export const AdminAuthContextProvider = ({ children }: AdminAuthContextProviderP
 
     if(retrivedAdminAuthData) setAdminAuthData(retrivedAdminAuthData);
 
-}, [])
+  }, [])
 
 
 // useEffect(() => {
@@ -54,16 +55,19 @@ export const AdminAuthContextProvider = ({ children }: AdminAuthContextProviderP
 
 
     const logout = () => {
-        // Implement your logout logic here
-        // Function to clear local storage data and update state
-        localStorage.removeItem(LOCAL_STORAGE_ADMINAUTHDATA_KEY);
-        setAdminAuthData(null);
+      localStorage.removeItem(LOCAL_STORAGE_ADMINAUTHDATA_KEY);
+      setAdminAuthData(null);
     };
+
+    // if (adminAuthData === null) {
+    //   return <Navigate to='/' />;
+    // }
+
 
 
 
   // console.log("returnedUserData", returnedUserData)
-  // console.log("AdminAuthData", adminAuthData)
+  console.log("AdminAuthData", adminAuthData)
   // console.log("managerObj", managerObj)
     
   

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { AdminAuth } from '../../hooks/useAdminAuthContext';
 import { ReactNode } from 'react';
 import { Navigate } from 'react-router-dom';
@@ -10,7 +10,17 @@ interface ProtectedPageProps {
 const ProtectedPage: React.FC<ProtectedPageProps> = ({ children }) => {
   const { adminAuthData } = AdminAuth();
 
-  if (!adminAuthData) {
+  // if (userAuthData === null) {
+  //   // setIsLoading(false)
+  //   return <Navigate to='/login' />;
+  // }
+
+  useEffect(() => {
+    
+  })
+
+
+  if (adminAuthData === null) {
     return <Navigate to='/' />;
   }
 

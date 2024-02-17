@@ -26,10 +26,17 @@ import Login from './components/authentication/login';
 import AuthLayout from './components/authentication/authLayout';
 import { AdminAuthContextProvider } from './context/adminAuthContext';
 import ProtectedPage from './components/authentication/protectedPage';
+import { QueryClient, QueryClientProvider } from  "@tanstack/react-query";
+import Register from './components/authentication/register';
 // import { PrimeReactProvider, PrimeReactContext } from 'primereact/api';
 // import 'primereact/resources/themes/saga-blue/theme.css';
 // import 'primereact/resources/primereact.min.css';
 // import 'primeicons/primeicons.css';
+
+
+
+const queryClient = new QueryClient();
+
 
 
 
@@ -40,6 +47,7 @@ import ProtectedPage from './components/authentication/protectedPage';
 const App = () => {
     return(
         <AdminAuthContextProvider>
+        <QueryClientProvider client={queryClient}>
         {/* <PrimeReactProvider > */}
 
         {/* <AuthContextProvider> */}
@@ -56,9 +64,11 @@ const App = () => {
             <Routes>
                 <Route path='/' element={<AuthLayout />}>
                     <Route index element={<Login />} />
+                    <Route path='/register' element={<Register />} />
                 </Route>
 
-                <Route path='/dashboard' element={<ProtectedPage> <Layout /> </ProtectedPage>}>
+                {/* <Route path='/dashboard' element={<ProtectedPage> <Layout /> </ProtectedPage>}> */}
+                <Route path='/dashboard' element={ <Layout /> }>
                     <Route index element={<Dashboard/>} />
                     
                     <Route path='client_details' element={<ClientDetailsLayout />}>
@@ -66,7 +76,7 @@ const App = () => {
                         <Route path='billing' element={<Billing />} />
                     </Route>
 
-                    <Route path='admin_details' element={<AdminDetails />} />
+                    <Route path='admin_details/:id' element={<AdminDetails />} />
 
                     <Route path='dispute_center' element={<DisputeCenterLayout />}>
                         <Route index element={<DisputeCenter />} />
@@ -97,6 +107,8 @@ const App = () => {
         {/* </PrimeReactProvider> */}
 
         {/* </AuthContextProvider> */}
+
+        </QueryClientProvider>
         </AdminAuthContextProvider>
 
 

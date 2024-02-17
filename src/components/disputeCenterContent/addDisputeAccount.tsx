@@ -104,7 +104,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
         formData.append('isDispute', isDispute.toString());
         formData.append('accType', "Type One");
 
-        const toastId = toast.loading("Adding Scores");
+        const toastId = toast.loading("Adding Account");
 
         try {        
             const response = await axios.post(`${BASE_URL}/account/saveAccount/${id}`, formData, {
@@ -117,7 +117,67 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
             // console.log("response", response.data);
             
             if (response.status === 200) {
-                toast.success("Scores added successfully", { id: toastId });
+                toast.success("Account added successfully", { id: toastId });
+                await fetchDisputeAccount();
+            } else {
+                toast.remove();
+                toast.error(response.data.message);
+            }
+        } catch (error: any) {
+            toast.remove();
+            if (error.message === 'Failed to fetch') {
+                toast.error('Network Error. Try again');
+            } else {
+                toast.error('Error encountered. Try again');
+            }
+            console.log(error.message);
+        }
+        
+        reset()
+    };
+
+
+    const addDisputeAcc = async (item: any) => {
+        console.log(item);
+
+        // const selectedCheckbox = checkboxes.find(checkbox => checkbox.checked);
+
+        // if (!selectedCheckbox?.name) {
+        // //   console.log('Selected checkbox:', selectedCheckbox?.name);
+        //   toast.error("Select a Bureau")
+        //   return
+        // }
+    
+
+        const currentDateTime = DateTime.now();
+        const formattedDate = currentDateTime.toFormat('yyyy-MM-dd');
+        // console.log(formattedDate);
+
+        const isDispute = true
+
+        const formData = new FormData();  
+        formData.append('accountName', item?.accountName);
+        formData.append('accountNumber', item?.accountNumber);
+        formData.append('balance', item?.accountBalance);
+        formData.append('bureau', item?.bureau);
+        formData.append('date', formattedDate);
+        formData.append('isDispute', isDispute.toString());
+        formData.append('accType', "Type One");
+
+        const toastId = toast.loading("Adding Account");
+
+        try {        
+            const response = await axios.post(`${BASE_URL}/account/saveAccount/${id}`, formData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            });
+        
+            // console.log("response", response);
+            
+            if (response.status === 200) {
+                toast.success("Account added successfully", { id: toastId });
                 await fetchDisputeAccount();
             } else {
                 toast.remove();
@@ -140,7 +200,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
     const fetchDisputeAccount = async () => {
         try {
           const response = await axios.get(
-            `${BASE_URL}/account/findUnattendedAccounts/${id}`,
+            `${BASE_URL}/account/findPreviousAccounts/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -148,6 +208,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
             }
           );
           const alldisputeAccountsData = response.data;
+        //   console.log("response", response)
 
           setAllDisputeAccounts(alldisputeAccountsData);
       
@@ -286,7 +347,7 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
                                         <p>{item?.accountNumber}</p>
                                         <p>{item?.bureau}</p>
                                         <p>${item?.balance}</p>
-                                        <button className='bg-primary text-white py-1 px-1 xs:py-1 xs:px-1 rounded-xl text-[.6rem] lg:text-[.9rem]' onClick={() => goToClientDetails(item?.id)}>Reuse</button>
+                                        <button className='bg-primary text-white py-1 px-1 xs:py-1 xs:px-1 rounded-xl text-[.6rem] lg:text-[.9rem]' onClick={() => addDisputeAcc(item)}>Reuse</button>
                                     </div>                
                                 </div>
                             ))

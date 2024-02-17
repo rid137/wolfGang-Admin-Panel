@@ -1,18 +1,24 @@
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
+// import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { DateTime} from "luxon";
+// import { DateTime} from "luxon";
 import AddClientForm from "../../components/dashboardContent/addClientForm";
 import CustomModal from "../../components/common/customModal";
 import DashboardStatistics from "../../components/dashboardContent/dashboardStatistics";
 import AddManagerForm from "../../components/dashboardContent/addManagerForm";
 import { BASE_URL } from "../../libs";
 // import { UserAuth } from "../../hooks/userAuthContext";
-import NewCustomTable from "../../components/common/newCustomTable";
+// import NewCustomTable from "../../components/common/newCustomTable";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 // import { Button } from "primereact/button";
 // import { DataTable } from "primereact/datatable";
 // import { Column } from "primereact/column";
+// import { Button } from "../../shadcn-components/ui/button";
+import { UserTable } from "../../components/common/userTable";
+import { clientColumns, managerColumns } from "../../components/common/reactTableColumn";
+import { useQueries } from "@tanstack/react-query";
+// import { Button } from "@/components/ui/button"
+
 // const NewCustomTable = React.lazy(() => import('../../components/common/newCustomTable'));
 // import { Button } from 'primereact/button';    
 
@@ -31,24 +37,26 @@ export enum Roles {
 const Dashboard = () => {
   const [showAddFormModal, setShowAddFormModal] = useState<boolean>(false);
   const [showAddAdminForm, setShowAddAdminForm] = useState<boolean>(false);
-  const [allClients, setAllClients] = useState([]);
-  const [allManagers, setAllManagers] = useState([]);
-  const [allDisputeAccounts, setAllDisputeAccounts] = useState<any>();
+  // const [allClients, setAllClients] = useState([]);
+  // const [allManagers, setAllManagers] = useState([]);
+  // const [allDisputeAccounts, setAllDisputeAccounts] = useState<any>();
 
-  const navigate = useNavigate();
+  
+
+  // const navigate = useNavigate();
 
   const { adminAuthData } = AdminAuth();
   const accessToken = adminAuthData?.token;
   const id = adminAuthData?.userId;
   const role = adminAuthData?.role
 
-  const goToClientDetails = (id: number) => {
-    navigate(`client_details/${id}`)
-  }
+  // const goToClientDetails = (id: number) => {
+  //   navigate(`client_details/${id}`)
+  // }
 
-  const goToAdminDetails = () => {
-    navigate("admin_details")
-  }
+  // const goToAdminDetails = () => {
+  //   navigate("admin_details")
+  // }
 
   const fetchClientsForManager = async () => {
     try {
@@ -62,7 +70,7 @@ const Dashboard = () => {
       );
       const clientsData = response.data;
 
-      setAllClients(clientsData);
+      // setAllClients(clientsData);
   
       return clientsData;
     } catch (error) {
@@ -82,7 +90,7 @@ const Dashboard = () => {
       );
       const clientsData = response.data;
 
-      setAllClients(clientsData);
+      // setAllClients(clientsData);
   
       return clientsData;
     } catch (error) {
@@ -102,7 +110,7 @@ const Dashboard = () => {
       );
       const managersData = response.data;
 
-      setAllManagers(managersData);
+      // setAllManagers(managersData);
   
       return managersData;
     } catch (error) {
@@ -122,62 +130,76 @@ const Dashboard = () => {
     );
     const alldisputeAccountsData = response.data;
 
-    setAllDisputeAccounts(alldisputeAccountsData);
+    // setAllDisputeAccounts(alldisputeAccountsData);
 
     return alldisputeAccountsData;
   } catch (error) {
       console.error('Error fetching all clients:', error);
     }
   };
+  
+  const fetchAllClientsInfo = async () => {
+    return role === Roles.Admin ? await fetchAllClients() : await fetchClientsForManager()
+  };
 
-  useEffect(() => {
-    const fetchAllClientsInfo = async () => {
-      role === Roles.Admin ? await fetchAllClients() : await fetchClientsForManager()
-    };
+  // useEffect(() => {
 
-    const fetchAllManagersInfo = async () => {
-      await fetchAllManagers();
-      // console.log("alllman", allman)
-    };
+  //   const fetchAllManagersInfo = async () => {
+  //     await fetchAllManagers();
+  //     // console.log("alllman", allman)
+  //   };
 
-    const fetchDisputeAccountInfo = async () => {
-      await fetchDisputeAccount();
-    };
+  //   const fetchDisputeAccountInfo = async () => {
+  //     await fetchDisputeAccount();
+  //   };
     
-    accessToken && fetchAllClientsInfo();
-    accessToken && fetchAllManagersInfo();
-    accessToken && fetchDisputeAccountInfo();
-  }, [accessToken]);
+  //   accessToken && fetchAllClientsInfo();
+  //   accessToken && fetchAllManagersInfo();
+  //   accessToken && fetchDisputeAccountInfo();
+  // }, [accessToken]);
+
+  const [allManagers, allDisputeAccounts, allClients  ] = useQueries({
+    queries: [
+      { queryKey: ['allManagerInfo'], queryFn: fetchAllManagers, enabled: !!accessToken },
+      { queryKey: ['disputeAccountInfo'], queryFn: fetchDisputeAccount, enabled: !!accessToken },
+      { queryKey: ['clients'], queryFn: fetchAllClientsInfo, enabled: !!accessToken },
+    ]
+  })
+
+  const memoizedManagerData = useMemo(() => allManagers?.data, [allManagers?.data])
+  const memoizedClientData = useMemo(() => allClients?.data, [allClients?.data])
+
     
-  const mappedClientsData = allClients.slice(0, 10).map((item: any) => ({
-  id: item.id,
-  firstBody: `${item.firstName}   ${item.lastName}`,
-  secondBody: item.status ? item.status : 'active',
-  thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
-  fourthBody: "Details",
-  }));
-  // slice(0, 10)
-  const mappedManagersData = allManagers.slice(0, 10).map((item: any) => ({
-    id: item.id,
-    firstBody: `${item.firstName}   ${item.lastName}`,
-    secondBody: item.status ? item.status : 'active',
-    thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
-    fourthBody: "Details",
-    // email: item.email,
-    // attended: item.attended,
-    // refreshDate: item.refreshDate,
-  }));
+  // const mappedClientsData = (allClients.data ?? []).slice(0, 10).map((item: any) => ({
+  // id: item.id,
+  // firstBody: `${item.firstName}   ${item.lastName}`,
+  // secondBody: item.status ? item.status : 'active',
+  // thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
+  // fourthBody: "Details",
+  // }));
+  // // slice(0, 10)
+  // const mappedManagersData = (allManagers.data ?? []).slice(0, 10).map((item: any) => ({
+  //   id: item.id,
+  //   firstBody: `${item.firstName}   ${item.lastName}`,
+  //   secondBody: item.status ? item.status : 'active',
+  //   thirdBody: DateTime.fromISO(item.updatedAt).toLocaleString(DateTime.DATE_MED),
+  //   fourthBody: "Details",
+  //   // email: item.email,
+  //   // attended: item.attended,
+  //   // refreshDate: item.refreshDate,
+  // }));
 
 
 
   return(
-    <section>
-      {adminAuthData && role === Roles.Admin && <DashboardStatistics allClients={allClients} allDisputeAccounts={allDisputeAccounts} />}
+    <section className="overflow-x-hidden">
+      {adminAuthData && role === Roles.Admin && <DashboardStatistics allClients={allClients?.data} allDisputeAccounts={allDisputeAccounts?.data} />}
       <div className="flex__between mt-8">
           <div className="">
               <p className="font-bold text-[1.4rem]">Clients</p>
           </div>
           {/* <Button label="Success" className="bg-blue-500 p-3" /> */}
+          {/* <Button className="text-white">Hello</Button> */}
 
           <button className="btnXs" onClick={() => setShowAddFormModal(true)}>Add New Client</button>
       </div>
@@ -198,24 +220,26 @@ const Dashboard = () => {
         handleBtnClick={goToClientDetails}
       /> */}
 
+      <UserTable columns={clientColumns} data={memoizedClientData ?? []} />
+
         {/* <div className="">
-             <DataTable className=""  showGridlines  stripedRows  style={{}}  value={allManagers} tableStyle={{ minWidth: '30rem'}}>
-                <Column bodyStyle={{}} field="id" header="Code" style={{padding: "10px", width: "25%" }}  headerStyle={{fontWeight: "700", fontSize: "1.1rem"}}     ></Column>
-                <Column field="firstName" header="Name" style={{padding: "5px", width: "25%" }}  headerStyle={{fontWeight: "700", fontSize: "1.1rem"}}></Column>
-                <Column field="lastName" header="Category" style={{padding: "5px", width: "25%" }} headerStyle={{fontWeight: "700", fontSize: "1.1rem"}} ></Column>
-                <Column field="processing" header="Quantity" style={{padding: "5px", width: "25%" }} headerStyle={{fontWeight: "700", fontSize: "1.1rem"}} ></Column>
-            </DataTable> 
+          <DataTable className=""  showGridlines  stripedRows  style={{}}  value={allManagers} tableStyle={{ minWidth: '20rem'}}>
+            <Column bodyStyle={{}} field="id" header="Code" style={{padding: "10px", width: "25%" }}  headerStyle={{fontWeight: "700", fontSize: "1.1rem"}}></Column>
+            <Column field="firstName" header="Name" style={{padding: "5px", width: "25%" }}  headerStyle={{fontWeight: "700", fontSize: "1.1rem"}}></Column>
+            <Column field="lastName" header="Category" style={{padding: "5px", width: "25%" }} headerStyle={{fontWeight: "700", fontSize: "1.1rem"}} ></Column>
+            <Column field="processing" header="Quantity" style={{padding: "5px", width: "25%" }} headerStyle={{fontWeight: "700", fontSize: "1.1rem"}} ></Column>
+          </DataTable> 
         </div> */}
 
         
 
-      <NewCustomTable
+      {/* <NewCustomTable
         titles={["Name", "Status", "Refresh Date", "Action"]}
         data={mappedClientsData}
         isButton={true}
         totalLength={allClients?.length}
         handleBtnClick={(id: number) => goToClientDetails(id)}
-      />
+      /> */}
 
     {adminAuthData && role === Roles.Admin &&
 
@@ -246,13 +270,16 @@ const Dashboard = () => {
           handleBtnClick={goToAdminDetails}
         /> */}
 
-          <NewCustomTable
+          <UserTable columns={managerColumns} data={memoizedManagerData ?? []} />
+
+
+          {/* <NewCustomTable
             titles={["Name", "Status", "Refresh Date", "Action"]}
             data={mappedManagersData}
             isButton={true}
             totalLength={allManagers?.length}
             handleBtnClick={goToAdminDetails}
-          />
+          /> */}
         </>
       }
 
