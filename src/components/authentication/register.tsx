@@ -83,7 +83,7 @@ const Register = () => {
                 },
             });
         
-            console.log("response", response);
+            // console.log("response", response);
         
             if (response.status === 200) {
                 // console.log("json response", response.data);

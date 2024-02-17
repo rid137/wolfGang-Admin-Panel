@@ -138,7 +138,7 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
         const handleFileUpload = async (file: File, parentId: string) => {
             const formData = new FormData();
             formData.append("ftc", file);
-            console.log("parentId", parentId)
+            // console.log("parentId", parentId)
 
             const toastId = toast.loading("Uploading File");
     
@@ -150,7 +150,7 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
                     },
                 });
     
-                console.log("response", response.data);
+                // console.log("response", response.data);
     
                 if (response.status === 200) {
                     // Assuming response.data.fileName is the name of the uploaded file
@@ -274,9 +274,9 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
                     responseType: 'blob',
 
                 });
-                console.log("parentObjectId", parentObject.id)
+                // console.log("parentObjectId", parentObject.id)
             
-                console.log("response", response.data);
+                // console.log("response", response.data);
                 
                 if (response.status === 200) {
                     toast.success("Letter Generated successfully", { id: toastId });

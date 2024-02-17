@@ -66,7 +66,7 @@ export const AdminAuthContextProvider = ({ children }: AdminAuthContextProviderP
 
 
   // console.log("returnedUserData", returnedUserData)
-  console.log("AdminAuthData", adminAuthData)
+  // console.log("AdminAuthData", adminAuthData)
   // console.log("managerObj", managerObj)
     
   
