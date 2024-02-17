@@ -1,4 +1,4 @@
-export interface ManagerProfileType {
+export interface ClientDetailsType {
     addressProof: null | string;
     attended: boolean;
     consultMethod: null | string;
@@ -53,5 +53,34 @@ export interface ManagerProfileType {
     transunionScore: null | number;
     updatedAt: string;
     zipCode: null | string;
+}
+
+
+export interface DisputeAccountType {
+    accType: string
+    accountName: string
+    accountNumber: string
+    balance: string
+    bureau: string
+    date: string
+    id: number
+    inDispute: boolean
+}
+
+export interface InquiryType {
+    bureau: string
+    date: string
+    id: number
+    inDispute: boolean
+    name: string
+}
+
+export interface ficoScoreType {
+    createdAt: string
+    equifaxScore: string
+    experianScore: string
+    id: number
+    transunionScore: string
+    updatedAt: string
 }
   

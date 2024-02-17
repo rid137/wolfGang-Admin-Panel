@@ -16,7 +16,7 @@ import InquiryListTable from "../../components/disputeCenterContent/inquiryListT
 // import { UserAuth } from "../../hooks/userAuthContext";
 import { BASE_URL } from "../../libs";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
-import { ManagerProfileType } from "../../types/managerObj";
+import { DisputeAccountType } from "../../types/clientDetailsObj";
 
 
 export const addFicoScoreSchema = z.object({
@@ -51,7 +51,7 @@ const DisputeAccountDetails = () => {
     const { id } = useParams();
 
     const [allScores, setAllScores] = useState<any>()
-    const [allAccounts, setAllAccounts] = useState<ManagerProfileType[]>([])
+    const [allAccounts, setAllAccounts] = useState<DisputeAccountType[]>([])
 
 
 
@@ -356,17 +356,17 @@ const DisputeAccountDetails = () => {
         <div className="grid grid-cols-1 md:grid-cols-2   lg:grid-cols-3 gap-4 w-ful mb-6">
             <div className="flex flex-col w-1/">
                 <label className="font-bold">Current Experian Score</label>
-                <CustomInput placeholder="534" />
+                <CustomInput placeholder="534" disabled />
             </div>
             
             <div className="flex flex-col w-1/">
                 <label className="font-bold">Current Equifax Score</label>
-                <CustomInput placeholder="564" />
+                <CustomInput placeholder="564" disabled />
             </div>
 
             <div className="flex flex-col w-1/">
                 <label className="font-bold">Current Transunion Score</label>
-                <CustomInput placeholder="532" />
+                <CustomInput placeholder="532" disabled />
             </div>
             
         </div>

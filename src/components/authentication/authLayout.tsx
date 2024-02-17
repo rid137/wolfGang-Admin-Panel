@@ -6,11 +6,10 @@ const AuthLayout = () => {
         <div className="flex items-center justify-center min-h-screen bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${wolfAuthBg})` }}>
             <Outlet />
         </div>
-    )
-}
+    );
+};
 
 export default AuthLayout;
-
 
 // const inputList = Array.from(new Array(4), (_, index) => {
 //     return (

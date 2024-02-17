@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { MdDashboard } from "react-icons/md";
 import { MdOutlinePayment } from "react-icons/md";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -12,7 +12,7 @@ import wolfgang from "../../assets/wolfgangLogo.png";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 import axios from "axios";
 import { BASE_URL } from "../../libs";
-import { ManagerProfileType } from "../../types/managerObj";
+import { ClientDetailsType } from "../../types/clientDetailsObj";
 
 
 interface SidebarProps {
@@ -22,7 +22,9 @@ interface SidebarProps {
   
 const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
     const [active, setActive] = useState("dashboard")
-    const [managerData, setManagerData] = useState<ManagerProfileType | null>(null)
+    const [managerData, setManagerData] = useState<ClientDetailsType | null>(null)
+
+    const navigate = useNavigate()
 
     // console.log("manager" ,managerData)
 
@@ -71,6 +73,7 @@ const Sidebar: React.FC<SidebarProps> = ({ isNavOpen, handleClick }) => {
         if(window.confirm("Are you sure you want to logout?")) {
             logout()
         }
+        navigate("/")
     }
 
     // const location = useLocation()

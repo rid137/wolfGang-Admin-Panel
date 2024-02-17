@@ -1,16 +1,22 @@
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import {  Outlet } from "react-router-dom";
 import { IoSearchSharp } from "react-icons/io5";
 import { IoMdMenu } from "react-icons/io";
 import Sidebar from "./sidebar";
 import avatar from '../../assets/avatar.jpg'
+// import { AdminAuth } from "../../hooks/useAdminAuthContext";
   
 const Layout = () => {
     const [isNavOpen, setIsNavOpen] = useState<boolean>(false)
+    // const { adminAuthData } = AdminAuth()
     // const location = useLocation()
     // if (location.pathname === "/client_details") {
     //     console.log("hello")
     // }
+
+    // if (adminAuthData === null) {
+    //     return <Navigate to='/' />;
+    //   }
 
     const handleClick = (): void => {
         setIsNavOpen(false)

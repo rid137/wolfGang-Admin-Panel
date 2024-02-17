@@ -74,8 +74,8 @@ export const Piechart = ({datas}: any) => {
   // console.log("datas", datas)
   
   const data = [
-    { name: 'Jan', uv: datas ? datas : 4000},
-    { name: 'Feb', uv: 400 },
+    { name: 'Jan', uv: 400},
+    { name: 'Feb', uv: datas ? datas : 400 },
     { name: 'Mar', uv: 360 },
     { name: 'Apr', uv: 380 },
     { name: 'May', uv: 500 },

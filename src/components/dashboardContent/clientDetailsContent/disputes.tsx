@@ -1,21 +1,27 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { DateTime } from "luxon";
-import inquiryLine from "../../../assets/inquiryLine.png";
-import PaginationBtn from "../../common/paginationBtn";
+// import inquiryLine from "../../../assets/inquiryLine.png";
+// import PaginationBtn from "../../common/paginationBtn";
 // import { UserAuth } from "../../../hooks/userAuthContext";
-import { NewCustomTableSkeleton } from "../../common/newCustomTable";
+// import { NewCustomTableSkeleton } from "../../common/newCustomTable";
+import { UserTable } from "../../common/userTable";
+import { disputeAccountTableColumns, inquiryTableColumns } from "../../common/reactTableColumn";
 // import { ManagerProfileType } from "../../../types/managerObj";
 
 
 interface DisputesProps {
     id: string;
-    accessToken: string
-    clientDisputeAccounts?: any
-    clientInquiries?: any
+    accessToken: string;
+    clientDisputeAccounts?: any;
+    clientInquiries?: any;
 }
 
 
 const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiries}): any => {
+    
+    // const memoizedDisputeAccountsData = useMemo(() => filteredDisputeAccounts, [filteredDisputeAccounts])
+    // const memoizedClientInquiriesData = useMemo(() => filteredInquiries, [filteredInquiries])
+
     const [selectedMonthForDispute, setSelectedMonthForDispute] = useState('2');
     const [selectedYearForDispute, setSelectedYearForDispute] = useState('2024');
     const [selectedMonthForInquiry, setSelectedMonthForInquiry] = useState('2');
@@ -56,12 +62,15 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
           const itemMonth = dateObject.month.toString();
           const itemYear = dateObject.year.toString();
       
-          return itemMonth === targetMonth && itemYear === targetYear;        
+          return itemMonth === targetMonth && itemYear === targetYear;       
         
         });
     };
     const filteredDisputeAccounts = filterByMonthAndYear(clientDisputeAccounts, selectedMonthForDispute, selectedYearForDispute);
     const filteredInquiries = filterByMonthAndYear(clientInquiries, selectedMonthForInquiry, selectedYearForInquiry);
+
+    const memoizedDisputeAccountsData = useMemo(() => filteredDisputeAccounts, [filteredDisputeAccounts])
+    const memoizedClientInquiriesData = useMemo(() => filteredInquiries, [filteredInquiries])
 
     const getMonthName = (month: number): string => {
         if (month < 1 || month > 12) {
@@ -80,7 +89,7 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
 
   return (
     <section>
-        <div className="text-center bg-greyBg p-4 md:p-10 w-full mt-4 rounded-md pb-10">
+        <div className="text-center bg-greyBg pt-12 md:p- w-full mt-6 rounded-md pb-4">
             <h4 className="font-bold text-[1.4rem]">Disputes and  Inquiries</h4>
 
             <div className="flex flex-col mx-auto">
@@ -131,19 +140,25 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
             </div>
 
             <h4 className="font-bold text-[1.4rem]">Disputes Account By {monthNameForDispute} ({selectedYearForDispute})</h4>
-            <p>Listed below are the account we identified  to be challenged in each  month</p>
+            <p>Listed below are the accounts we identified  to be challenged in each  month</p>
+
+
         </div>
 
-            <div className="bg-greyBg w-ful text-black pb-4 m-w-[90%] w-full overflow-x-scrol "> 
-                <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-5 lg:mx-10 text-[.7rem] lg:text-[.9rem]">
-                    <p>Account name</p>
-                    <p>Account number</p>
-                    <p>Bureau</p>
-                    <p>Balance</p>
-                </div>
 
 
-                {
+        <div className="bg-greyBg w-ful text-black pb-14 m-w-[90%] w-full overflow-x-scro "> 
+            <UserTable data={memoizedDisputeAccountsData ?? []} columns={disputeAccountTableColumns}/>
+            {/* <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-5 lg:mx-10 text-[.7rem] lg:text-[.9rem]">
+                <p>Account name</p>
+                <p>Account number</p>
+                <p>Bureau</p>
+                <p>Balance</p>
+            </div> */}
+
+
+
+                {/* {
                 clientDisputeAccounts && clientDisputeAccounts?.length >= 0 ?
                 <>
                     {
@@ -173,7 +188,7 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
                 <>
                     <NewCustomTableSkeleton />
                 </>
-            }
+            } */}
 
                 {/* {Array(10)
                         .fill(10)
@@ -190,17 +205,17 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
                     ))
                 } */}
 
-                <div className="flex justify-center sm:justify-end mx-4">
+                {/* <div className="flex justify-center sm:justify-end mx-4">
                     <p>Latest actions (Showing 01 to 10 of {clientDisputeAccounts?.length})</p>
                 </div>
 
                 <PaginationBtn />
                 <div className="w-full mx-auto my-[3rem] flex items-center justify-center">
                     <img src={inquiryLine} className="w-[70%]" alt="" />
-                </div>
+                </div> */}
 
 
-                <div className="flex items-center justify-center gap-3 mx-auto my-3">
+                <div className="flex items-center justify-center gap-3 mx-auto mb-3 mt-20">
                 <select
                     className="bg-white py-3 px-2 flex__center gap-1 w-24 "
                     id="month"
@@ -232,13 +247,14 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
             </div>
 
 
-                <div className="text-center mb-8 mt-4">
+                <div className="text-center my-4">
                     <h4 className="font-bold text-[1.4rem]">Inquiries Disputed By {monthNameForInquiry} ({selectedYearForInquiry})</h4>
 
                     <p className="mx-4 my-2">Listed below are the account we identified  to be challenged in each  month</p>
                 </div>
 
-                <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-7 lg:mx-10 text-[.7rem] lg:text-[.9rem]">
+                <UserTable data={memoizedClientInquiriesData ?? []} columns={inquiryTableColumns} />
+                {/* <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-7 lg:mx-10 text-[.7rem] lg:text-[.9rem]">
                     <p>Name</p>
                     <p>Date Of Inquiry</p>
                     <p>Bureau</p>
@@ -273,7 +289,7 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
                 <>
                     <NewCustomTableSkeleton />
                 </>
-            }
+            } */}
 
 
                 {/* {Array(10)
@@ -290,11 +306,11 @@ const Disputes: React.FC<DisputesProps> = ({clientDisputeAccounts, clientInquiri
                     ))
                 } */}
 
-                <div className="flex justify-end mx-4">
+                {/* <div className="flex justify-end mx-4">
                     <p>Latest actions (Showing 01 to 10 of {clientInquiries?.length})</p>
                 </div>
 
-                <PaginationBtn />
+                <PaginationBtn /> */}
             </div>
         </section>
         

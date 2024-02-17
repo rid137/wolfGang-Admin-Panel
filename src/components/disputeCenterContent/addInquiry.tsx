@@ -58,7 +58,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
     const fetchPreviousInquiries = async () => {
         try {
           const response = await axios.get(
-            `${BASE_URL}/inquiry/getInquiry/${id}`,
+            `${BASE_URL}/inquiry/getPreviousInquiry/${id}`,
             {
               headers: {
                 Authorization: `Bearer ${accessToken}`,
@@ -120,10 +120,10 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
                 },
             });
         
-            // console.log("response", response.data);
+            console.log("response", response);
             
             if (response.status === 200) {
-                toast.success("Scores added successfully", { id: toastId });
+                toast.success("Inquiry added successfully", { id: toastId });
                await fetchPreviousInquiries()
             } else {
                 toast.remove();

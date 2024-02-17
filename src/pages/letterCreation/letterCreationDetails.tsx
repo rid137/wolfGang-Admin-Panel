@@ -6,13 +6,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { BASE_URL } from "../../libs";
 import { useEffect, useState } from "react";
-import { ManagerProfileType } from "../../types/managerObj";
+import { ClientDetailsType } from "../../types/clientDetailsObj";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 import { DateTime } from "luxon";
 import toast from "react-hot-toast";
 
 const LetterCreationDetails = () => {
-    const [singleClient, setSingleClient] = useState<ManagerProfileType>();
+    const [singleClient, setSingleClient] = useState<ClientDetailsType>();
     const [experianPairs, setExperianPairs] = useState<any>();
     const [equifaxPairs, setEquifaxPairs] = useState<any>();
     const [transunionPairs, setTransunionPairs] = useState<any>();

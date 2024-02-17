@@ -1,9 +1,12 @@
-import PaginationBtn from '../common/paginationBtn';
-import trash from "../../assets/trash.svg";
-import axios from 'axios';
-import { BASE_URL } from '../../libs';
-import { NewCustomTableSkeleton } from '../common/newCustomTable';
-import toast from 'react-hot-toast';
+// import PaginationBtn from '../common/paginationBtn';
+// import trash from "../../assets/trash.svg";
+// import axios from 'axios';
+// import { BASE_URL } from '../../libs';
+// import { NewCustomTableSkeleton } from '../common/newCustomTable';
+// import toast from 'react-hot-toast';
+import { UserTable } from '../common/userTable';
+import { useMemo } from 'react';
+import { disputeAccountWithActionTableColumns } from '../common/reactTableColumn';
 
 
 interface AccountListTableProps {
@@ -13,7 +16,7 @@ interface AccountListTableProps {
     fetchAllAccounts: () => any
 }
   
-const AccountListTable: React.FC<AccountListTableProps> = ({ accessToken, allAccounts, fetchAllAccounts}): any => {
+const AccountListTable: React.FC<AccountListTableProps> = ({ allAccounts }): any => {
     // const [allAccounts, setAllAccounts] = useState<any>()
     // console.log("allAccounts", allAccounts)
 
@@ -46,35 +49,37 @@ const AccountListTable: React.FC<AccountListTableProps> = ({ accessToken, allAcc
     //     accessToken && fetchAllAccountsInfo();
     // }, [accessToken]);
 
-    const handleDelete = async (id: string | number) => {
-        if(window.confirm('Are you sure you want to delete the account?'))  {
+    // const handleDelete = async (id: string | number) => {
+    //     if(window.confirm('Are you sure you want to delete the account?'))  {
 
-            const toastId = toast.loading("Deleting Account, Please Wait!");
+    //         const toastId = toast.loading("Deleting Account, Please Wait!");
 
 
-            try {
-                const response = await axios.delete(
-                  `${BASE_URL}/account/deleteAccount/${id}`,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                    },
-                  }
-                );
+    //         try {
+    //             const response = await axios.delete(
+    //               `${BASE_URL}/account/deleteAccount/${id}`,
+    //               {
+    //                 headers: {
+    //                   Authorization: `Bearer ${accessToken}`,
+    //                 },
+    //               }
+    //             );
 
-                if (response.status === 200) {
-                    toast.success('Account deleted successfully', { id: toastId })
-                    await fetchAllAccounts();
-                }
+    //             if (response.status === 200) {
+    //                 toast.success('Account deleted successfully', { id: toastId })
+    //                 await fetchAllAccounts();
+    //             }
 
-            } catch (error) {
-                toast.remove()
-                toast.error('something went wrong!')
-                console.error('Error occur:', error);
-            }
+    //         } catch (error) {
+    //             toast.remove()
+    //             toast.error('something went wrong!')
+    //             console.error('Error occur:', error);
+    //         }
 
-        }        
-    }
+    //     }        
+    // }
+    const memoizedAllAccountData = useMemo(() => allAccounts, [allAccounts])
+
 
 
 
@@ -86,13 +91,13 @@ const AccountListTable: React.FC<AccountListTableProps> = ({ accessToken, allAcc
                 <p className="">Lists of account</p>
             </div>
 
-            <button className="btnXs">Edit</button>
+            {/* <button className="btnXs">Edit</button> */}
                 
             
         </div>
 
-
-        <div className="bg-greyBg text-black text-center py-6 mt-5 rounded-md"> 
+        <UserTable data={memoizedAllAccountData ?? []} columns={disputeAccountWithActionTableColumns} />
+        {/* <div className="bg-greyBg text-black text-center py-6 mt-5 rounded-md"> 
                 
             <div className="flex justify-between items-center gap-[.4rem] md:gap-0  font-bold mb-3  mx-5 lg:mx-16 text-[.6rem] lg:text-[.9rem] mt-">
                 <p>Date</p>
@@ -102,12 +107,11 @@ const AccountListTable: React.FC<AccountListTableProps> = ({ accessToken, allAcc
                 <p>Balance</p>
                 <p>Delete</p>
             </div>
-            {/* allAccounts.slice(0, 10).map((item: any) => ( */}
 
             {
                     allAccounts ? (
                         allAccounts.length > 0 ? (
-                            allAccounts.map((item: any) => (
+                            allAccounts.slice(0, 10).map((item: any) => ( 
                                 <div key={item.id} className="bg-white mx-1 md:mx-4 rounded-lg" >
                                     <div className="flex justify-between items-center gap-2 md:gap-0 w-full  mb-2 py-3 lg:pl-6 lg:pr-14 px-3 text-[.5rem] lg:text-[.9rem] ">
                                         <p>{item?.date}</p>
@@ -126,7 +130,7 @@ const AccountListTable: React.FC<AccountListTableProps> = ({ accessToken, allAcc
                     ) : (
                         <NewCustomTableSkeleton />
                     )
-                }
+                } */}
 
             {/* {
                 allAccounts?.length > 0 ? 
@@ -170,12 +174,12 @@ const AccountListTable: React.FC<AccountListTableProps> = ({ accessToken, allAcc
                 ))
             } */}
 
-            <div className="flex justify-end mx-4">
+            <div className="mb-16">
                 {/* <p>Latest actions (Showing 1 to 10 of {allAccounts?.length})</p> */}
             </div>
 
-            <PaginationBtn />
-        </div>
+            {/* <PaginationBtn /> */}
+        {/* </div> */}
 
     </>
   )
