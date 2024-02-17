@@ -83,16 +83,16 @@ const DisputeCenter = () => {
       enabled: !!accessToken
     })
 
-    if(isLoading) {
-      return <p>Loading...</p>
-    }
-  // useEffect(() => {
-    
-  //   accessToken && fetchDisputeAccountsForManagerInfo();
-  // }, [accessToken]);
-
-  const memoizedclientForDisputeData = useMemo(() => clientForDispute, [clientForDispute])
-
+    // useEffect(() => {
+      
+      //   accessToken && fetchDisputeAccountsForManagerInfo();
+      // }, [accessToken]);
+      
+      const memoizedclientForDisputeData = useMemo(() => clientForDispute, [clientForDispute])
+      
+      if(isLoading) {
+        return <p>Loading...</p>
+      }
   // const mappedClientsData = (data ?? [])?.slice(0, 10).map((item: any) => ({
   //   id: item.id,
   //   firstBody: `${item.firstName}   ${item.lastName}`,
