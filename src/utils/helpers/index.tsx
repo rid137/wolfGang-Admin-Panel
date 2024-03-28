@@ -5,9 +5,9 @@ type TimeAgoProps = {
 };
 
 
-export const clipSentence = (str: string, wordAmout: number): string => {
+export const clipSentence = (str: string, wordAmout: number, fromFront?: boolean): string => {
     if(str.length > wordAmout) {
-        str = str.substring(0, wordAmout) + '...'
+        fromFront ? str =  '**** **** ****' + str.slice(-wordAmout) : str = str.substring(0, wordAmout) + '...'
     };
     return str;
 };
@@ -90,3 +90,26 @@ export const TimeAgo: React.FC<TimeAgoProps> = ({ timestamp }) => {
 
   return <span>{timeAgo}</span>;
 };
+
+
+export const checkExtension = (str: string): string => {
+  return str.slice(str.lastIndexOf("."))
+}
+
+export const generateRandomNumber = (): number =>  {
+  return Math.floor(Math.random() * 100000);
+}
+
+
+// export const getDateTime = (apiDate: string | Date): string => {
+//   // const apiDate = '2023-10-27T13:26';
+//   const date = new Date(apiDate);
+
+//   const formattedDate = format(date, 'EEE MMM dd yyyy HH:mm:ss');
+
+//   return formattedDate; 
+// }
+
+export const capitalize = (str: string): string => {
+  return str[0].toUpperCase() + str.slice(1).toLowerCase()
+}

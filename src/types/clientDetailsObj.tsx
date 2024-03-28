@@ -83,4 +83,20 @@ export interface ficoScoreType {
     transunionScore: string
     updatedAt: string
 }
+
+export interface PaymentDataType {
+    amount: number
+    date: string
+    status: string
+    subscription: {
+        id: number,
+        subscriptionType: string,
+        price: number,
+        paymentFrequency: string,
+        numberOfPayment: number,
+        isActive: boolean
+    },
+    transactionId: string
+    userName: string
+}
   

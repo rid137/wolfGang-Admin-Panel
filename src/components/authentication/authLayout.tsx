@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import wolfAuthBg from "../../assets/wolfAuthBg.jpeg";
+import wolfAuthBg from "../../assets/wolfAuthBg1.jpeg";
 
 const AuthLayout = () => {
     return(

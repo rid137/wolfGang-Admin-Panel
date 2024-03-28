@@ -35,7 +35,7 @@ const CustomLabelInput: React.FC<LabelIputProps> = ({label, text, isEditing, dis
                         value={editedText}
                         onChange={handleTextChange}
                         disabled={disabled && disabled}
-                        className='lg:w-[8rem]'
+                        className='lg:w-[8rem] focus:outline-primary'
                         // onChange={(e) => setEditedText(e.target.value)}
                     />
                 </div>

@@ -8,6 +8,7 @@ import { NewCustomTableSkeleton } from "../common/newCustomTable";
 interface CheckboxData {
     name: string;
     checked: boolean;
+    bgColor: string;
 }
 
 interface AddInquiryProps {
@@ -20,9 +21,9 @@ interface AddInquiryProps {
 // }
 
 const initialCheckboxes: CheckboxData[] = [
-    { name: 'Experian', checked: false },
-    { name: 'Equifax', checked: false },
-    { name: 'Transunion', checked: false },
+    { name: 'Transunion', checked: false, bgColor: "#00a8cb" },
+    { name: 'Experian', checked: false, bgColor: "#001689" },
+    { name: 'Equifax', checked: false, bgColor: "#b32541" },
 ];
 
 const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
@@ -86,31 +87,86 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
     }, [accessToken]);
 
 
+    // const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    //     const selectedCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
+    
+    //     if (selectedCheckboxes.length === 0) {
+    //       toast.error('Select at least one Bureau');
+    //       return;
+    //     }
+    
+    //     const currentDateTime = DateTime.now();
+    //     const formattedDate = currentDateTime.toFormat('yyyy-MM-dd');
+    
+    //     const isDispute = true;
+    
+    //     for (const selectedCheckbox of selectedCheckboxes) {
+    //       const formData = new FormData();
+    //       formData.append('accountName', data.accountName as string);
+    //       formData.append('accountNumber', data.accountNumber as string);
+    //       formData.append('balance', data.accountBalance as string);
+    //       formData.append('bureau', selectedCheckbox.name.toUpperCase());
+    //       formData.append('date', formattedDate);
+    //       formData.append('isDispute', isDispute.toString());
+    //       formData.append('accType', 'Type One');
+    
+    //       const toastId = toast.loading(`Adding Account for ${selectedCheckbox.name}`);
+    
+    //       try {
+    //         const response = await axios.post(`${BASE_URL}/account/saveAccount/${id}`, formData, {
+    //           headers: {
+    //             'Content-Type': 'application/json',
+    //             Authorization: `Bearer ${accessToken}`,
+    //           },
+    //         });
+    
+    //         if (response.status === 200) {
+    //           toast.success(`Account added for ${selectedCheckbox.name} successfully`, { id: toastId });
+    //           console.log("allAccountCreationResponse", response)
+    //           await fetchDisputeAccount();
+    //         } else {
+    //           toast.remove();
+    //           toast.error(response.data.message);
+    //         }
+    //       } catch (error: any) {
+    //         toast.remove();
+    //         if (error.message === 'Failed to fetch') {
+    //           toast.error('Network Error. Try again');
+    //         } else {
+    //           toast.error('Error encountered. Try again');
+    //         }
+    //         console.log(error.message);
+    //       }
+    //     }
+    
+    //     reset();
+    //   };
+
     
 
     const handleSubmit = async (e: any) => {
         e.preventDefault()
-        const selectedCheckbox = checkboxes.find(checkbox => checkbox.checked);
+        const selectedCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
 
     
-        if (!selectedCheckbox?.name) {
-        //   console.log('Selected checkbox:', selectedCheckbox?.name);
-          toast.error("Select a Bureau")
-          return
-
+        if (selectedCheckboxes.length === 0) {
+            toast.error('Select at least one Bureau');
+            return;
         }
 
-        const requestData = {
-            name: inquiryName,
-            date: dateString,
-            bureau: selectedCheckbox?.name.toUpperCase(),
-            // date: formattedDate, // If you want to include the formatted date
-        };
+        for (const selectedCheckbox of selectedCheckboxes) {
+
+                const requestData = {
+                name: inquiryName,
+                date: dateString,
+                bureau: selectedCheckbox?.name.toUpperCase(),
+                // date: formattedDate, // If you want to include the formatted date
+            };
     
 
         // console.log("FormData contents:", requestData);
        
-        const toastId = toast.loading("Adding Inquiry");
+        const toastId = toast.loading(`Adding Account for ${selectedCheckbox.name}`);
 
         try {        
             const response = await axios.post(`${BASE_URL}/inquiry/save/${id}`, requestData, {
@@ -123,8 +179,9 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
             console.log("response", response);
             
             if (response.status === 200) {
-                toast.success("Inquiry added successfully", { id: toastId });
-               await fetchPreviousInquiries()
+                toast.success(`Account added for ${selectedCheckbox.name} successfully`, { id: toastId });
+                console.log("allAccountCreationResponse", response)               
+                await fetchPreviousInquiries();
             } else {
                 toast.remove();
                 toast.error(response.data.message);
@@ -142,6 +199,7 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
         setDateString("")
         setInquiryName("")
     };
+    }
       
 
 
@@ -158,13 +216,13 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
                     <div key={checkbox.name} className="mb-2">
                         <input
                             type="checkbox"
-                            id={checkbox.name}
+                            id={checkbox.bgColor}
                             name={checkbox.name}
                             checked={checkbox.checked}
                             className="size-4"
                             onChange={() => handleCheckboxChange(checkbox.name)}
                         />
-                        <label htmlFor={checkbox.name} className="ml-2 font-bold">
+                        <label htmlFor={checkbox.bgColor} className="ml-2 font-bold text-white p-1 rounded-md" style={{backgroundColor: `${checkbox.bgColor}`}}>
                             {checkbox.name}
                         </label>
                     </div>
@@ -175,13 +233,13 @@ const AddInquiry: React.FC<AddInquiryProps> = ({id, accessToken}): any => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold flex justify-start">Name</label>
                     {/* <CustomInput placeholder="Enter details" /> */}
-                    <input  type="text" className="inputCls" placeholder="Enter details" onChange={(e) => setInquiryName(e.target.value)}  />
+                    <input  type="text" className="inputCls focus:outline-primary" placeholder="Enter details" onChange={(e) => setInquiryName(e.target.value)}  />
                         
                 </div>
                 
                 <div className="flex flex-col w-1/">
                     <label className="font-bold flex justify-start">Date Of Inquiry</label>
-                    <input type="date" className="bg-white py-3 px-4 shadow-md rounded-xl mt-2" onChange={(e) => setDateString(e.target.value)} />
+                    <input type="text" placeholder="dd/mm/yyyy" className="bg-white py-3 px-4 shadow-md rounded-xl mt-2 focus:outline-primary" onChange={(e) => setDateString(e.target.value)} />
                 </div>
 
             
