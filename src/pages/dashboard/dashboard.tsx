@@ -4,7 +4,7 @@ import axios from "axios";
 // import { DateTime} from "luxon";
 import AddClientForm from "../../components/dashboardContent/addClientForm";
 import CustomModal from "../../components/common/customModal";
-import DashboardStatistics from "../../components/dashboardContent/dashboardStatistics";
+import DashboardStatistics, { StatSkeleton } from "../../components/dashboardContent/dashboardStatistics";
 import AddManagerForm from "../../components/dashboardContent/addManagerForm";
 import { BASE_URL } from "../../libs";
 // import { UserAuth } from "../../hooks/userAuthContext";
@@ -169,6 +169,10 @@ const Dashboard = () => {
   const memoizedManagerData = useMemo(() => allManagers?.data, [allManagers?.data])
   const memoizedClientData = useMemo(() => allClients?.data, [allClients?.data])
 
+
+  const memoizedClientTableColumn = useMemo(() => clientColumns, [clientColumns])
+  const memoizedManagerTableColumn = useMemo(() => managerColumns, [managerColumns])
+
     
   // const mappedClientsData = (allClients.data ?? []).slice(0, 10).map((item: any) => ({
   // id: item.id,
@@ -193,7 +197,12 @@ const Dashboard = () => {
 
   return(
     <section className="overflow-x-hidden">
-      {adminAuthData && role === Roles.Admin && <DashboardStatistics allClients={allClients?.data} allDisputeAccounts={allDisputeAccounts?.data} />}
+
+      {
+        allClients?.isLoading ? <StatSkeleton /> : adminAuthData && role === Roles.Admin && <DashboardStatistics allClients={allClients?.data} allDisputeAccounts={allDisputeAccounts?.data} />
+
+      }
+      {/* {adminAuthData && role === Roles.Admin && <DashboardStatistics allClients={allClients?.data} allDisputeAccounts={allDisputeAccounts?.data} />} */}
       <div className="flex__between mt-8">
           <div className="">
               <p className="font-bold text-[1.4rem]">Clients</p>
@@ -220,7 +229,13 @@ const Dashboard = () => {
         handleBtnClick={goToClientDetails}
       /> */}
 
-      <UserTable columns={clientColumns} data={memoizedClientData ?? []} />
+      {
+        allClients?.isLoading ? 
+            <p>Loading...</p>
+          :
+            <UserTable columns={memoizedClientTableColumn} data={memoizedClientData ?? []} />
+
+      }
 
         {/* <div className="">
           <DataTable className=""  showGridlines  stripedRows  style={{}}  value={allManagers} tableStyle={{ minWidth: '20rem'}}>
@@ -244,7 +259,7 @@ const Dashboard = () => {
     {adminAuthData && role === Roles.Admin &&
 
       <>
-        <div className="flex__between mt-8">
+        <div className="flex__between mt-16">
             <div className="">
                 <p className="font-bold text-[1.4rem]">Managers</p>
             </div>
@@ -270,7 +285,15 @@ const Dashboard = () => {
           handleBtnClick={goToAdminDetails}
         /> */}
 
-          <UserTable columns={managerColumns} data={memoizedManagerData ?? []} />
+          {/* <UserTable columns={memoizedManagerTableColumn} data={memoizedManagerData ?? []} /> */}
+
+          {
+        allManagers?.isLoading ? 
+            <p>Loading...</p>
+          :
+          <UserTable columns={memoizedManagerTableColumn} data={memoizedManagerData ?? []} />
+
+      }
 
 
           {/* <NewCustomTable

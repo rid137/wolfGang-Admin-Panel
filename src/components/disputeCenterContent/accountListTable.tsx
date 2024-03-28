@@ -1,12 +1,18 @@
 // import PaginationBtn from '../common/paginationBtn';
-// import trash from "../../assets/trash.svg";
+import trash from "../../assets/trash.svg";
 // import axios from 'axios';
 // import { BASE_URL } from '../../libs';
 // import { NewCustomTableSkeleton } from '../common/newCustomTable';
 // import toast from 'react-hot-toast';
+import { ColumnDef } from '@tanstack/react-table';
+import { DisputeAccountType } from '../../types/clientDetailsObj';
 import { UserTable } from '../common/userTable';
 import { useMemo } from 'react';
-import { disputeAccountWithActionTableColumns } from '../common/reactTableColumn';
+import { DateTime } from 'luxon';
+import toast from 'react-hot-toast';
+import axios from 'axios';
+import { BASE_URL } from '../../libs';
+// import { disputeAccountWithActionTableColumns } from '../common/reactTableColumn';
 
 
 interface AccountListTableProps {
@@ -16,7 +22,7 @@ interface AccountListTableProps {
     fetchAllAccounts: () => any
 }
   
-const AccountListTable: React.FC<AccountListTableProps> = ({ allAccounts }): any => {
+const AccountListTable: React.FC<AccountListTableProps> = ({ allAccounts, accessToken, fetchAllAccounts }): any => {
     // const [allAccounts, setAllAccounts] = useState<any>()
     // console.log("allAccounts", allAccounts)
 
@@ -79,6 +85,86 @@ const AccountListTable: React.FC<AccountListTableProps> = ({ allAccounts }): any
     //     }        
     // }
     const memoizedAllAccountData = useMemo(() => allAccounts, [allAccounts])
+
+ const disputeAccountWithActionTableColumns: ColumnDef<DisputeAccountType | null>[] = [
+        {
+            header: "Date",
+            accessorKey: "date",
+            cell: ({row}) => {
+                const refreshDate = row.getValue("date")
+                return DateTime.fromISO(refreshDate as string).toLocaleString(DateTime.DATE_MED)
+            }
+        },
+        {
+            header: "Account name",
+            accessorKey: "accountName"
+            // accessorFn: "accountName"
+        },
+        {
+            header: "Account number",
+            accessorKey: "accountNumber",
+        },
+        {
+            header: "Bureau",
+            accessorKey: "bureau",
+        },
+        {
+            header: "Balance",
+            accessorKey: "balance"
+        },
+        {
+            header: "Delete",
+            cell: ({ row }) => {
+                const dispute = row.original;
+                const disputeId = dispute?.id;
+                return <DeleteDisputeAccountButton disputeId={disputeId} />;
+            },
+        },
+    ]
+    
+    
+    const DeleteDisputeAccountButton: React.FC<{ disputeId?: number }> = ({ disputeId }) => {
+        // const { adminAuthData } = AdminAuth();
+        // const accessToken = adminAuthData?.token;
+    
+        const handleDisputeAccountDelete = async () => {
+            if(window.confirm('Are you sure you want to delete the account?'))  {
+    
+                const toastId = toast.loading("Deleting Account, Please Wait!");
+    
+    
+                try {
+                    const response = await axios.delete(
+                      `${BASE_URL}/account/deleteAccount/${disputeId}`,
+                      {
+                        headers: {
+                          Authorization: `Bearer ${accessToken}`,
+                        },
+                      }
+                    );
+    
+                    if (response.status === 200) {
+                        toast.success('Account deleted successfully', { id: toastId })
+                        await fetchAllAccounts();
+                    }
+    
+                } catch (error) {
+                    toast.remove()
+                    toast.error('something went wrong!')
+                    console.error('Error occur:', error);
+                }
+    
+            }        
+        }
+    
+        return (
+            <button onClick={handleDisputeAccountDelete}>
+                <img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" />
+            </button>
+        );
+    };
+    
+    
 
 
 

@@ -4,6 +4,8 @@ import axios from "axios";
 import { BASE_URL } from "../../libs";
 import { AdminAuth } from "../../hooks/useAdminAuthContext";
 import toast from "react-hot-toast";
+import { ClientDetailsType } from "../../types/clientDetailsObj";
+import { generateRandomNumber } from "../../utils/helpers";
 
 interface AccType {
     accType: string | null
@@ -26,12 +28,14 @@ interface CustomTableWithLetterProps {
     accSetId?: number
     uploadId?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     burResponse?: any
+    singleClient?: ClientDetailsType
 }
 
-const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, burResponse}) => {
+const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, burResponse, singleClient}) => {
     // console.log("AccSet", AccSet)
-    // console.log("burResponse", burResponse)
+    console.log("burResponse", burResponse)
     const [fileNames, setFileNames] = useState<string[]>([]);
+    const randomDigits =  generateRandomNumber()
 
     // console.log("fileInfo", fileInfo)
 
@@ -39,77 +43,11 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
     const accessToken = adminAuthData?.token;
 
 
-    // const uploadId = (e: React.ChangeEvent<HTMLInputElement>) => {
-    //     const file = e.target.files && e.target.files[0];
-    //     // console.log("file", file)
-    //     setFileName(file?.name)
-
-    //     // if (file && file.size > 1_000_000) {
-    //     //     alert("Images size cannot be more 1MB"),
-    //     //     return
-    //     // }
-      
-    //     if (file) {
-    //     //   setPlaceholderImg(file);
-      
-    //       const reader = new FileReader();
-    //       reader.onload = () => {
-    //         const thumbnail = reader.result as string;
-    //         setFileInfo(thumbnail);
-    //       };
-      
-    //       reader.readAsDataURL(file);
-    //     }
-    //     handleFileUpload();
-    
-    // };
-
-    // const handleFileUpload = async () => {
-    //     const formData = new FormData()
-
-    //     formData.append("ftc", fileInfo)
-
-    //     const toastId = toast.loading("Uploading File");
-    //     // console.log(fileInfo)
-    //     console.log("FormData contents:");
-    //     for (let pair of formData.entries()) {
-    //         console.log(pair[0] + ": " + pair[1]);
-    //     }
-
-    //     try {        
-    //         const response = await axios.post(`${BASE_URL}/pairing/uploadFTC/${accSetId}`, formData, {
-    //             headers: {
-    //                 'Content-Type': 'application/json',
-    //                 Authorization: `Bearer ${accessToken}`,
-    //             },
-    //         });
-        
-    //         console.log("response", response.data);
-            
-    //         if (response.status === 200) {
-    //             toast.success("File Uploaded successfully", { id: toastId });
-    //         } else {
-    //             toast.remove();
-    //             toast.error(response.data.message);
-    //         }
-    //     } catch (error: any) {
-    //         toast.remove();
-    //         if (error.message === 'Failed to fetch') {
-    //             toast.error('Network Error. Try again');
-    //         } else {
-    //             toast.error('Error encountered. Try again');
-    //         }
-    //         console.log(error.message);
-    //     }
-        
-    // }
-
-
     const renderAccountsSection = (parentObject: any, index: number) => {
         // const label = "Your Label"; 
         // const text = "Your Text"; 
         const AccSet = parentObject.accounts;
-        console.log("objId", parentObject?.id)
+        console.log("objId", AccSet)
     
         const baseValue = index * 5 + 1;
     
@@ -177,13 +115,6 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
                 const parentId = e.target.id;
                 setNameOfFile(parentId, file.name);
 
-                // const reader = new FileReader();
-                // reader.onload = () => {
-                //     const thumbnail = reader.result as string;
-                //     setFileInfo(thumbnail);
-                // };
-
-                // reader.readAsDataURL(file);
                 handleFileUpload(file, parentId);
             };
         };
@@ -196,71 +127,6 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
                 return updatedFileNames;
             });
         };
-
-        // const uploadId = (e: React.ChangeEvent<HTMLInputElement>) => {
-        //     const file = e.target.files && e.target.files[0];
-        //     // console.log("file", file)
-        //     setFileName(file?.name)
-    
-        //     // if (file && file.size > 1_000_000) {
-        //     //     alert("Images size cannot be more 1MB"),
-        //     //     return
-        //     // }
-          
-        //     if (file) {
-        //     //   setPlaceholderImg(file);
-          
-        //       const reader = new FileReader();
-        //       reader.onload = () => {
-        //         const thumbnail = reader.result as string;
-        //         setFileInfo(thumbnail);
-        //       };
-          
-        //       reader.readAsDataURL(file);
-        //     }
-        //     handleFileUpload();
-        
-        // };
-    
-        // const handleFileUpload = async () => {
-        //     const formData = new FormData()
-    
-        //     formData.append("ftc", fileInfo)
-    
-        //     const toastId = toast.loading("Uploading File");
-        //     // console.log(fileInfo)
-        //     console.log("FormData contents:");
-        //     for (let pair of formData.entries()) {
-        //         console.log(pair[0] + ": " + pair[1]);
-        //     }
-    
-        //     try {        
-        //         const response = await axios.post(`${BASE_URL}/pairing/uploadFTC/${parentObject?.id}`, formData, {
-        //             headers: {
-        //                 'Content-Type': 'application/json',
-        //                 Authorization: `Bearer ${accessToken}`,
-        //             },
-        //         });
-            
-        //         console.log("response", response.data);
-                
-        //         if (response.status === 200) {
-        //             toast.success("File Uploaded successfully", { id: toastId });
-        //         } else {
-        //             toast.remove();
-        //             toast.error(response.data.message);
-        //         }
-        //     } catch (error: any) {
-        //         toast.remove();
-        //         if (error.message === 'Failed to fetch') {
-        //             toast.error('Network Error. Try again');
-        //         } else {
-        //             toast.error('Error encountered. Try again');
-        //         }
-        //         console.log(error.message);
-        //     }
-            
-        // }
 
         const generateLetter = async () => {
             const toastId = toast.loading("Generating Letter");
@@ -285,7 +151,9 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
                     const link = document.createElement('a')
                     link.href = blobUrl
 
-                    link.download = 'combined_letter.pdf'
+                    // Specific name => ClientName + Bureau + RandomNumber.lenght = 5-10 + combined_letter.pdf
+                    link.download = `${burResponse[0]?.bureau} ${singleClient?.firstName} ${singleClient?.lastName} ${randomDigits}  combined_letter.pdf`
+                    // link.download = ` combined_letter.pdf`
 
                     link.click();
                 } else {
@@ -377,86 +245,12 @@ const CustomTableWithLetter: React.FC<CustomTableWithLetterProps> = ({label, bur
             </div>
         );
     };
-    
-
-    // const renderArr = () => {
-    //     const arr = burResponse && burResponse[0]?.accounts;
-    
-    //     switch (arr?.length) {
-    //         case 1:
-    //             console.log("(1)");
-    //             break;
-    //         case 2:
-    //             console.log("(1-2)");
-    //             break;
-    //         case 3:
-    //             console.log("(1-3)");
-    //             break;
-    //         case 4:
-    //             console.log("(1-4)");
-    //             break;
-    //         case 5:
-    //             console.log("(1-5)");
-    //             break;
-    
-    //         default:
-    //             console.log(`(${arr?.length})`);
-    //             break;
-    //     }
-    
-    //     for (let i = 0; i < burResponse?.length; i++) {
-    //         const parentObject = burResponse[i];
-    //         console.log("parentObj", parentObject);
-    //         // Additional code for processing parentObject if needed
-    //     }
-    // }    
-    // renderArr();
-    
-
-    // const reanderArr = () => {
-    //     const arr = burResponse && burResponse[0]?.accounts
-    //     for (let i = 0; i < arr?.length; i++) {
-    //         // Access each object in the parent array
-    //         const parentObject = arr[i];
-    //         console.log("parentObj", i)
-    
-    //         // Assuming each parent object has a property 'nestedArray'
-    //         // const nestedArray = parentObject.nestedArray;
-    
-    //         // // Loop through the nested array of objects
-    //         // for (let j = 0; j < nestedArray.length; j++) {
-    //         //     const nestedObject = nestedArray[j];
-    
-    //         //     // Display or process the nested object as needed
-    //         //     console.log(nestedObject);
-    //         // }
-    //     }
-    // }
-    // reanderArr()
-
 
       
   return (
         <>
                 {burResponse && burResponse?.map((parentObject: any, index:any ) => (
-                    // <div className="gap-4 flex flex-col md:flex-row items-center justify-center mt-6">
-                        // <div className="w-full md:w-2/3" key={index}>
-                            renderAccountsSection(parentObject, index)
-                        // </div>
-                
-
-                        // <div className="w-full md:w-1/3">
-                        //     <h4 className="font-bold text-[1.4rem]">FTC Letters</h4>
-                        //     <p className="">Upload document(s) the accounts.</p>
-
-                        //     <div className="bg-greyBg w-full h-[21rem] flex__column mt-5">
-                        //         {fileName && <p>{fileName}</p> }
-                        //         <label htmlFor="upload_id"><img src={file} className="bg-greyBg text-greyBg cursor-pointer" alt="" /></label>
-                        //         <input type="file" id="upload_id" onChange={uploadId} className="hidden" />
-
-                        //     </div>  
-                        // </div>
-                    // </div>
+                    renderAccountsSection(parentObject, index)   
                 ))}
         </>
   )

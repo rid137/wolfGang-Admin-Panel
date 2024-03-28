@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { ClientDetailsType, DisputeAccountType, InquiryType, ficoScoreType } from "../../types/clientDetailsObj";
+import { ClientDetailsType, DisputeAccountType, InquiryType, PaymentDataType, ficoScoreType } from "../../types/clientDetailsObj";
 import { DateTime } from "luxon";
 // import { Button } from "../../shadcn-components/ui/button";
 import { Link } from "react-router-dom";
@@ -8,12 +8,34 @@ import toast from "react-hot-toast";
 import { BASE_URL } from "../../libs";
 import axios from "axios";
 import trash from "../../assets/trash.svg"
+import { Status } from "../../pages/payment";
 
-// const navigate = useNavigate();
+const getStatusTextColor = (status: string | undefined) => {
+    switch (status) {
+        case Status.Success:
+        return 'rgba(211, 252, 202, 1)';
+        case Status.Pending:
+        return 'rgba(252, 250, 202, 1)';
+        case Status.Failed:
+        return 'rgba(252, 205, 202, 1)';
+        default:
+        return 'black';
+    }
+};
 
-//   const goToClientDetails = (id: number) => {
-//     navigate(`client_details/${id}`)
-//   }
+const getStatusBgColor = (status: string | undefined) => {
+    switch (status) {
+        case Status.Success:
+        return 'rgba(3, 105, 32, 1)';
+        case Status.Pending:
+        return 'rgba(192, 161, 2, 1)';
+        case Status.Failed:
+        return 'rgba(236, 19, 19, 1)';
+        default:
+        return 'black';
+    }
+}
+
 
 export const clientColumns: ColumnDef<ClientDetailsType | null>[] = [
     {
@@ -31,9 +53,9 @@ export const clientColumns: ColumnDef<ClientDetailsType | null>[] = [
     },
     {
         header: "Refresh Date",
-        accessorKey: "updatedAt",
+        accessorKey: "refreshDate",
         cell: ({row}) => {
-            const refreshDate = row.getValue("updatedAt")
+            const refreshDate = row.getValue("refreshDate")
             return DateTime.fromISO(refreshDate as string).toLocaleString(DateTime.DATE_MED)
         }
     },
@@ -163,9 +185,9 @@ export const disputeCenterTableColumns: ColumnDef<ClientDetailsType | null>[] = 
     },
     {
         header: "Refresh Date",
-        accessorKey: "updatedAt",
+        accessorKey: "refreshDate",
         cell: ({row}) => {
-            const refreshDate = row.getValue("updatedAt")
+            const refreshDate = row.getValue("refreshDate")
             return DateTime.fromISO(refreshDate as string).toLocaleString(DateTime.DATE_MED)
         }
     },
@@ -203,9 +225,9 @@ export const letterCreationTableColumns: ColumnDef<ClientDetailsType | null>[] =
     },
     {
         header: "Refresh Date",
-        accessorKey: "updatedAt",
+        accessorKey: "refreshDate",
         cell: ({row}) => {
-            const refreshDate = row.getValue("updatedAt")
+            const refreshDate = row.getValue("refreshDate")
             return DateTime.fromISO(refreshDate as string).toLocaleString(DateTime.DATE_MED)
         }
     },
@@ -501,3 +523,32 @@ export const letterCreationInquiryTableColumns: ColumnDef<InquiryType | null>[] 
         }
     },
 ]
+
+
+export const paymentTableColumns: ColumnDef<PaymentDataType | null>[] = [
+{
+    header: "Date",
+    accessorKey: "date",
+    cell: ({row}) => {
+        const paymentDate = row.getValue("date")
+        return DateTime.fromISO(paymentDate as string).toLocaleString(DateTime.DATE_MED)
+    }
+},
+{
+    header: "Amount",
+    // accessorKey: "amount",
+    accessorFn: row => `$${row?.amount}`
+},
+{
+    header: "Status",
+    accessorKey: "status",
+    cell: ({row}) => {
+        const getRow = row.original
+        const getStatus = getRow?.status
+        return (
+            <button className={`px-4 py-1 my- rounded-md cursor-default`} style={{ color: getStatusBgColor(getStatus) , background: getStatusTextColor(getStatus)}}>{getStatus}</button>
+        )
+    }
+},
+]
+                    

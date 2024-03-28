@@ -172,7 +172,7 @@ const LetterCreationDetails = () => {
     }, [accessToken]);
 
     const handleDelete = async () => {
-        if(window.confirm('Are you sure you want to delete the pairs'))  {
+        if(window.confirm('Are you sure you want to mark as completed?'))  {
             toast.loading("Processing, Please Wait!")
     
           try {
@@ -237,16 +237,16 @@ const LetterCreationDetails = () => {
             </form>
         </div>
 
-        <CustomTableWithLetter label="Experian" text="Experian" burResponse={experianPairs && experianPairs} AccSet={experianPairs && experianPairs[0]?.accounts} fileInfo={fileInfo1} fileName={fileName1} uploadId={handleUploadId1} inpId="id_upload_1" accSetId={experianPairs && experianPairs[0]?.id} />
+        <CustomTableWithLetter singleClient={singleClient} label="Experian" text="Experian" burResponse={experianPairs && experianPairs} AccSet={experianPairs && experianPairs[0]?.accounts} fileInfo={fileInfo1} fileName={fileName1} uploadId={handleUploadId1} inpId="id_upload_1" accSetId={experianPairs && experianPairs[0]?.id} />
         <Inquiries InqAcc={experianPairs && experianPairs[0]?.inquiries} />
         {/* <CustomTableWithLetter label="Next Group Of Experian Disputed Accounts (6-10)" text="Experian" AccSet={experianPairs && experianPairs[1]?.accounts} uploadId={handleUploadId2} fileInfo={fileInfo2} fileName={fileName2}   inpId="id_upload_2" accSetId={experianPairs && experianPairs[1].id} /> */}
 
         {/* {experianPairs && experianPairs[2]?.accounts &&  <CustomTableWithLetter label="Next Group Of Experian Disputed Accounts (11-13)" text="Experian" inpId="id_upload_3" accSetId={experianPairs && experianPairs[2].id} />} */}
 
-        <CustomTableWithLetter label="Equifax" text="Experian" burResponse={equifaxPairs && equifaxPairs}  />
+        <CustomTableWithLetter singleClient={singleClient} label="Equifax" text="Experian" burResponse={equifaxPairs && equifaxPairs}  />
         <Inquiries InqAcc={equifaxPairs && equifaxPairs[0]?.inquiries} />
 
-        <CustomTableWithLetter label="Transunion" text="Experian" burResponse={transunionPairs && transunionPairs}  />
+        <CustomTableWithLetter singleClient={singleClient} label="Transunion" text="Experian" burResponse={transunionPairs && transunionPairs}  />
         <Inquiries InqAcc={transunionPairs && transunionPairs[0]?.inquiries} />
 
 

@@ -10,9 +10,9 @@ interface DashboardStatisticsProps {
 
 const DashboardStatistics: React.FC<DashboardStatisticsProps> = ({allClients, allDisputeAccounts}) => {
 
-    if (!allClients || allClients.length === 0) {
-        return <div><StatSkeleton /></div>;
-    }
+    // if (!allClients || allClients.length === 0) {
+    //     return <div><StatSkeleton /></div>;
+    // }
 
       
     return(
@@ -72,7 +72,7 @@ const DashboardStatistics: React.FC<DashboardStatisticsProps> = ({allClients, al
 export default DashboardStatistics;
 
 
-const StatSkeleton = () => {
+export const StatSkeleton = () => {
     return(
         <div className="grid grid-cols-1 xs lg:grid-cols-4 md:grid-cols-2 gap-8">
             <div className="bg-[#E6E6E6] py-8 px-6 rounded-xl">

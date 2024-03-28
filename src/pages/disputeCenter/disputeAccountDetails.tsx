@@ -319,7 +319,7 @@ const DisputeAccountDetails = () => {
                     <div className="ml-6">
                         <p>Username: {singleClient?.firstName} </p>
                         <p>Password: password1 </p>
-                        <p>Last 4 Digits: {singleClient?.phone.slice((singleClient.phone.length - 1) -3, singleClient.phone.length - 0)}</p>
+                        <p>Last 4 Digits: {singleClient?.phone?.slice((singleClient.phone.length - 1) -3, singleClient.phone.length - 0)}</p>
                         
                     </div>
 
@@ -377,7 +377,7 @@ const DisputeAccountDetails = () => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Experian FICO Score</label>
                     {/* <CustomInput placeholder="Enter Score" /> */}
-                    <input {...register('experian')} type="number" max='850'  className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('experian')} type="number" max='850'  className="inputCls focus:outline-primary" placeholder="Enter Score"  />
                     {errors.experian && (
                         <p className="text-red-600">{errors.experian.message}</p>
                     )}
@@ -386,7 +386,7 @@ const DisputeAccountDetails = () => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Equifax FICO Score</label>
                     {/* <CustomInput placeholder="Enter Score" /> */}
-                    <input {...register('equifax')} type="number" max='850' className="inputCls" placeholder="Enter Score"  />
+                    <input {...register('equifax')} type="number" max='850' className="inputCls focus:outline-primary" placeholder="Enter Score"  />
                     {errors.equifax && (
                         <p className="text-red-600">{errors.equifax.message}</p>
                     )}
@@ -395,7 +395,7 @@ const DisputeAccountDetails = () => {
                 <div className="flex flex-col w-1/">
                     <label className="font-bold">Transunion FICO Score</label>
                     {/* <CustomInput placeholder="Enter Score" /> */}
-                    <input {...register('transunion')} type="number" max='850' className="inputCls" placeholder="Enter Score" />
+                    <input {...register('transunion')} type="number" max='850' className="inputCls focus:outline-primary" placeholder="Enter Score" />
                     {errors.transunion && (
                         <p className="text-red-600">{errors.transunion.message}</p>
                     )}

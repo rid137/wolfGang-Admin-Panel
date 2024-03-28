@@ -11,6 +11,8 @@ import { Piechart } from "../../../components/dashboardContent/clientDetailsCont
 import { AdminAuth } from "../../../hooks/useAdminAuthContext";
 import { ClientDetailsType, DisputeAccountType } from "../../../types/clientDetailsObj";
 import toast from "react-hot-toast";
+import CustomModal from "../../../components/common/customModal";
+import AssignManagerModalContent from "../../../components/dashboardContent/clientDetailsContent/assignManagerModalContent";
 
 const ClientDetails = () => {
     const [showClientDetails, setShowClientDetails] = useState<boolean>(false);
@@ -22,9 +24,10 @@ const ClientDetails = () => {
 
     const [clientDisputeAccounts, setClientDisputeAccounts] = useState<DisputeAccountType[]>([])
     const [clientInquiries, setClientInquiries] = useState<any>()
+    const [showAssignManagerModal, setShowAssignManagerModal] = useState(false)
 
 
-    // console.log("singleClinet", singleClient)
+    console.log("singleClinet", singleClient)
     
     const { id } = useParams();
 
@@ -158,8 +161,10 @@ const ClientDetails = () => {
         const formData = new FormData();
 
         formData.append('email', updatedClient?.email as string);
-        // formData.append('firstName', data.firstName as string);
-        // formData.append('lastName', data.lastName as string);
+        formData.append('firstName', updatedClient?.firstName as string);
+        formData.append('lastName', updatedClient?.lastName as string);
+        formData.append('midddleName', updatedClient?.middleName as string);
+        formData.append('phone', updatedClient?.phone as string);
         // // formData.append('password', data.password);
         // formData.append('phone', data.phoneNumber);
         // console.log("FormData contents:");
@@ -175,7 +180,7 @@ const ClientDetails = () => {
                 },
             });
         
-            // console.log("response", response.data);
+            console.log("response", response.data);
             
             if (response.status === 200) {
                 toast.success("Profile Updated Successfully", { id: toastId });
@@ -253,6 +258,7 @@ const ClientDetails = () => {
                         }
                         {/* <button className="btnXs ml-3" onClick={() => setIsEditing(true)}>{isEditing ? "Save" : "Edit"}</button> */}
                         <button className="btnXs ml-3" onClick={handleClick}>Close</button>
+                        <button className="btnXs ml-3" onClick={() => setShowAssignManagerModal(true)} >Assign Manager</button>
                    </div> :
                     <div className="flex sm:block flex-wrap gap-3">
                         <button className="btnXs " onClick={handleClick}>Client Details</button>
@@ -262,6 +268,8 @@ const ClientDetails = () => {
                    </div>
                 }
             </div>
+            {showAssignManagerModal && <CustomModal closeModal={setShowAssignManagerModal}> <AssignManagerModalContent clientId={singleClient?.id as number} /> </CustomModal>}
+
 
             <div className="flex flex-col lg:flex-row items-center justify-center gap-5 mt-6">
                 <div className="w-full md:w-1/3 flex flex-col">
@@ -314,7 +322,7 @@ const ClientDetails = () => {
                             /> */}
                             <CustomLabelInput onChange={(newValue) => handleTextChange("email", newValue)} isEditing={isEditing} label="Email" text={`${singleClient?.email}`}/>
                             <CustomLabelInput onChange={(newValue) => handleTextChange("status", newValue)} isEditing={isEditing} label="Status" text={`${singleClient?.status ? singleClient?.status : "active"}`} disabled />
-                            <CustomLabelInput isEditing={isEditing} label="Account manager" text={`${singleClient?.manager?.firstName} ${singleClient?.manager?.lastName}`}/>
+                            <CustomLabelInput isEditing={isEditing} label="Account manager" text={`${singleClient?.manager?.firstName} ${singleClient?.manager?.lastName}`} disabled/>
 
                         </div>
 
@@ -344,14 +352,14 @@ const ClientDetails = () => {
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-">
                             <CustomLabelInput isEditing={isEditing} label="Next Round" text="21/04/2023" disabled/>
                             <CustomLabelInput isEditing={isEditing} label="Date of Payment" text="6/11/2023" disabled/>
-                            <CustomLabelInput isEditing={isEditing} onChange={(newValue) => handleTextChange("experianScore", newValue)} label="Experian Score" text={`${singleClient?.experianScore}`}/>
+                            <CustomLabelInput isEditing={isEditing} onChange={(newValue) => handleTextChange("experianScore", newValue)} label="Experian Score" text={`${singleClient?.experianScore}`} disabled/>
 
                         
                         </div>
 
                         <div className="flex items-center justify-center gap-3 lg:flex-row flex-col my-">
-                            <CustomLabelInput isEditing={isEditing} onChange={(newValue) => handleTextChange("equifaxScore", newValue)} label="Equifax Score" text={`${singleClient?.equifaxScore}`}/>
-                            <CustomLabelInput isEditing={isEditing} onChange={(newValue) => handleTextChange("transunionScore", newValue)} label="Transunion Score" text={`${singleClient?.transunionScore}`}/>
+                            <CustomLabelInput isEditing={isEditing} onChange={(newValue) => handleTextChange("equifaxScore", newValue)} label="Equifax Score" text={`${singleClient?.equifaxScore}`} disabled/>
+                            <CustomLabelInput isEditing={isEditing} onChange={(newValue) => handleTextChange("transunionScore", newValue)} label="Transunion Score" text={`${singleClient?.transunionScore}`} disabled/>
                             <CustomLabelInput isEditing={isEditing} label="Total Accounts" text="741" disabled/>
                         
                         </div>

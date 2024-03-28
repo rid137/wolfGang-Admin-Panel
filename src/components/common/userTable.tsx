@@ -27,6 +27,7 @@ export function UserTable<TData, TValue>({columns, data}: ReactTableProps<TData,
     const table = useReactTable({
         data,
         columns,
+    
         getCoreRowModel: getCoreRowModel(),
         getPaginationRowModel: getPaginationRowModel(),
       })
@@ -88,14 +89,94 @@ export function UserTable<TData, TValue>({columns, data}: ReactTableProps<TData,
                 </Table>
             </div> 
 
-            <div className="mt-4 flex items-center justify-center gap-2 md:gap-4 text-white text-[.5rem] md:text-[.8rem]">
+            {/* <div className="mt-4 flex items-center justify-center gap-2 md:gap-4 text-white text-[.5rem] md:text-[.8rem]">
                 <button onClick={() => table.setPageIndex(0)} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl">First Page </button>
                 <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl disabled:bg-blue-400">Previous Page</button>
                 <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl disabled:bg-blue-400">Next Page</button>
                 <div onClick={() => table.setPageIndex(table.getPageCount() - 1)} className="bg-primary text-white py-1 px-2 xs:py-2 xs:px-3 rounded-xl">Last Page</div>
                 
             </div>
-            
+            <div className="">
+            <span className="flex items-center gap-2">
+                <p>Page</p>
+                <strong>
+                    {table.getState().pagination.pageIndex + 1} of{' '}
+                    {table.getPageCount()}
+                </strong>
+            </span>
+
+            <span className="goto">
+                | Go to page:
+                <input
+                    type="number"
+                    defaultValue={table.getState().pagination.pageIndex + 1}
+                    onChange={e => {
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0
+                        table.setPageIndex(page)
+                    }}
+                    min={1}
+                />
+            </span>
+
+            <select
+                value={table.getState().pagination.pageSize}
+                onChange={e => {
+                    table.setPageSize(Number(e.target.value))
+                }}
+            >
+                {[10, 20, 30, 40, 50].map(pageSize => (
+                    <option key={pageSize} value={pageSize}>
+                        Show {pageSize}
+                    </option>
+                ))}
+            </select> 
+
+            </div>
+             */}
+
+    <div className="mt-4 flex items-center justify-between gap-2 md:gap-4 text-white ">
+        <div className="flex items-center gap-2 text-[.5rem] md:text-[.75rem]">
+            <button onClick={() => table.setPageIndex(0)} className="bg-primary text-white py-1 px-2 xs:px-3 rounded-xl">First Page</button>
+            <button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()} className="bg-primary text-white py-1 px-2 xs:px-3 rounded-xl disabled:bg-blue-400">Previous</button>
+            <button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()} className="bg-primary text-white py-1 px-2 xs:px-3 rounded-xl disabled:bg-blue-400">Next</button>
+            <button onClick={() => table.setPageIndex(table.getPageCount() - 1)} className="bg-primary text-white py-1 px-2 xs:px-3 rounded-xl">Last Page</button>
+        </div>
+
+        <div className="flex items-center gap-2 text-black">
+            <span>
+                Page <strong>{table.getState().pagination.pageIndex + 1}</strong> of {table.getPageCount()}
+            </span>
+
+            <span className="goto">
+                | Go to page:
+                <input
+                    type="number"
+                    className='focus:outline-primary'
+                    defaultValue={table.getState().pagination.pageIndex + 1}
+                    onChange={(e) => {
+                        const page = e.target.value ? Number(e.target.value) - 1 : 0;
+                        table.setPageIndex(page);
+                    }}
+                    min={1}
+                />
+            </span>
+
+            <select
+                value={table.getState().pagination.pageSize}
+                onChange={(e) => {
+                    table.setPageSize(Number(e.target.value));
+                }}
+                className="bg-primary text-white xs:py-2 rounded-xl focus:outline-none py-1 px-2 xs:px-3 text-[.5rem] md:text-[.75rem]"
+            >
+                {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <option key={pageSize} value={pageSize} className='bg-white text-black'>
+                        Show {pageSize}
+                    </option>
+                ))}
+            </select>
+        </div>
+    </div>
+
 
         
         {/* <div className="overflow-x-auto max-w-full rounded-md mt-8 box-border">
