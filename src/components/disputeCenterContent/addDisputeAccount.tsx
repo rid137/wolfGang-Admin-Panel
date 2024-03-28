@@ -208,12 +208,12 @@ const AddDisputeAccount: React.FC<AddDisputeProps> = ({id, accessToken}): any =>
         // setCheckboxes({...checkboxes, checked: true});
         // checkbox.name === name ? { ...checkbox, checked: !checkbox.checked } : checkbox
         // const selectedCheckboxes = checkboxes.filter((checkbox) => checkbox.checked);
-        const selectedCheckboxes = checkboxes.map((checkbox) => {
-            return(
-                checkbox.checked = true
+        // const selectedCheckboxes = checkboxes.map((checkbox) => {
+        //     return(
+        //         checkbox.checked = true
                 
-            )
-        });
+        //     )
+        // });
 
 
       

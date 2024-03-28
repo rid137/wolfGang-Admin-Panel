@@ -1,7 +1,7 @@
-import { paymentData } from "../utils/dummy";
+// import { paymentData } from "../utils/dummy";
 import mastercardLogo from "../assets/mastercardLogo.svg"
 import exclaim from "../assets/exclaim.svg"
-import PaginationBtn from "../components/common/paginationBtn";
+// import PaginationBtn from "../components/common/paginationBtn";
 import { z } from "zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { BASE_URL } from "../libs";
 import { AdminAuth } from "../hooks/useAdminAuthContext";
-import { useMutation, useQueries, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueries } from "@tanstack/react-query";
 import { clipSentence } from "../utils/helpers";
 import { useMemo, useState } from "react";
 import { UserTable } from "../components/common/userTable";
@@ -79,7 +79,6 @@ const Payment = () => {
     const {
         handleSubmit,
         register,
-        reset,
         formState: { errors, isSubmitting },
     } = useForm<FormFields>({
     resolver: zodResolver(addCardSchema),
@@ -143,7 +142,7 @@ const Payment = () => {
         // reset()
     };
 
-    const queryClient = useQueryClient();
+    // const queryClient = useQueryClient();
 
 
     // const {mutate: addCardMutation} = useMutation<any, Error, FormFields>(
