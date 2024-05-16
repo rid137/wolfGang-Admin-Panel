@@ -77,11 +77,11 @@ const DisputeCenter = () => {
   //   ]
   // })
 
-    const { isLoading,  data: clientForDispute } = useQuery({
-      queryKey: ['disputeAccount'],
-      queryFn: fetchDisputeAccountsForManagerInfo,
-      enabled: !!accessToken
-    })
+  const { isLoading,  data: clientForDispute } = useQuery({
+    queryKey: ['disputeAccount'],
+    queryFn: fetchDisputeAccountsForManagerInfo,
+    enabled: !!accessToken
+  })
 
     // useEffect(() => {
       
