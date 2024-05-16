@@ -288,12 +288,12 @@ const Dashboard = () => {
           {/* <UserTable columns={memoizedManagerTableColumn} data={memoizedManagerData ?? []} /> */}
 
           {
-        allManagers?.isLoading ? 
-            <p>Loading...</p>
-          :
-          <UserTable columns={memoizedManagerTableColumn} data={memoizedManagerData ?? []} />
+            allManagers?.isLoading ? 
+              <p>Loading...</p>
+              :
+              <UserTable columns={memoizedManagerTableColumn} data={memoizedManagerData ?? []} />
 
-      }
+          }
 
 
           {/* <NewCustomTable

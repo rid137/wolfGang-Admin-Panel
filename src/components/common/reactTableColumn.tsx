@@ -359,83 +359,83 @@ const DeleteFicoButton: React.FC<{ clientId?: number }> = ({ clientId }) => {
 };
 
 
-export const disputeAccountWithActionTableColumns: ColumnDef<DisputeAccountType | null>[] = [
-    {
-        header: "Date",
-        accessorKey: "date",
-        cell: ({row}) => {
-            const refreshDate = row.getValue("date")
-            return DateTime.fromISO(refreshDate as string).toLocaleString(DateTime.DATE_MED)
-        }
-    },
-    {
-        header: "Account name",
-        accessorKey: "accountName"
-        // accessorFn: "accountName"
-    },
-    {
-        header: "Account number",
-        accessorKey: "accountNumber",
-    },
-    {
-        header: "Bureau",
-        accessorKey: "bureau",
-    },
-    {
-        header: "Balance",
-        accessorKey: "balance"
-    },
-    {
-        header: "Delete",
-        cell: ({ row }) => {
-            const dispute = row.original;
-            const disputeId = dispute?.id;
-            return <DeleteDisputeAccountButton disputeId={disputeId} />;
-        },
-    },
-]
+// export const disputeAccountWithActionTableColumns: ColumnDef<DisputeAccountType | null>[] = [
+//     {
+//         header: "Date",
+//         accessorKey: "date",
+//         cell: ({row}) => {
+//             const refreshDate = row.getValue("date")
+//             return DateTime.fromISO(refreshDate as string).toLocaleString(DateTime.DATE_MED)
+//         }
+//     },
+//     {
+//         header: "Account name",
+//         accessorKey: "accountName"
+//         // accessorFn: "accountName"
+//     },
+//     {
+//         header: "Account number",
+//         accessorKey: "accountNumber",
+//     },
+//     {
+//         header: "Bureau",
+//         accessorKey: "bureau",
+//     },
+//     {
+//         header: "Balance",
+//         accessorKey: "balance"
+//     },
+//     {
+//         header: "Delete",
+//         cell: ({ row }) => {
+//             const dispute = row.original;
+//             const disputeId = dispute?.id;
+//             return <DeleteDisputeAccountButton disputeId={disputeId} />;
+//         },
+//     },
+// ]
 
 
-const DeleteDisputeAccountButton: React.FC<{ disputeId?: number }> = ({ disputeId }) => {
-    const { adminAuthData } = AdminAuth();
-    const accessToken = adminAuthData?.token;
+// const DeleteDisputeAccountButton: React.FC<{ disputeId?: number }> = ({ disputeId }) => {
+//     const { adminAuthData } = AdminAuth();
+//     const accessToken = adminAuthData?.token;
 
-    const handleDisputeAccountDelete = async () => {
-        if(window.confirm('Are you sure you want to delete the account?'))  {
+//     const handleDisputeAccountDelete = async () => {
+//         if(window.confirm('Are you sure you want to delete the account?'))  {
 
-            const toastId = toast.loading("Deleting Account, Please Wait!");
+//             const toastId = toast.loading("Deleting Account, Please Wait!");
 
 
-            try {
-                const response = await axios.delete(
-                  `${BASE_URL}/account/deleteAccount/${disputeId}`,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${accessToken}`,
-                    },
-                  }
-                );
+//             try {
+//                 const response = await axios.delete(
+//                   `${BASE_URL}/account/deleteAccount/${disputeId}`,
+//                   {
+//                     headers: {
+//                       Authorization: `Bearer ${accessToken}`,
+//                     },
+//                   }
+//                 );
 
-                if (response.status === 200) {
-                    toast.success('Account deleted successfully', { id: toastId })
-                    // await fetchAllAccounts();
-                }
+//                 if (response.status === 200) {
+//                     toast.success('Account deleted successfully', { id: toastId })
+//                     // await fetchAllAccounts();
+//                 }
 
-            } catch (error) {
-                toast.remove()
-                toast.error('something went wrong!')
-                console.error('Error occur:', error);
-            }
+//             } catch (error) {
+//                 toast.remove()
+//                 toast.error('something went wrong!')
+//                 console.error('Error occur:', error);
+//             }
 
-        }        
-    }
+//         }        
+//     }
 
-    return (
-        <button onClick={handleDisputeAccountDelete}>
-            <img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" />
-        </button>
-    );
-};
+//     return (
+//         <button onClick={handleDisputeAccountDelete}>
+//             <img className="cursor-pointer w-3 h-3"  src={trash} alt="delete" />
+//         </button>
+//     );
+// };
 
 
 export const inquiryWithActionTableColumns: ColumnDef<InquiryType | null>[] = [
